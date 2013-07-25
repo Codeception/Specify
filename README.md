@@ -3,10 +3,10 @@ Specify
 
 BDD style code blocks for PHPUnit / Codeception
 
-Specify allows you to write your tests in more readable BDD style.
+Specify allows you to write your tests in more readable BDD style, the same way you might have experienced with [Jasmine](http://pivotal.github.io/jasmine/).
 Inspired by MiniTest of Ruby now you combine BDD and classical TDD style in one test.
 
-Additionaly, we recommemd to combine this with `codeception/verify` library, to get BDD style assertions.
+Additionaly, we recommend to combine this with [`codeception/verify`](https://github.com/Codeception/Verify) library, to get BDD style assertions.
 
 ``` php
 <?
