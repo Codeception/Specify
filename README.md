@@ -76,6 +76,9 @@ $this->assertTrue(true);
 ?>
 ```
 
+If a test fails you will specification text in the result.
+
+
 ## Installation
 
 *Requires PHP >= 5.4.*
