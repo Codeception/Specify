@@ -18,10 +18,14 @@ class SpecifyTest extends \PHPUnit_Framework_TestCase {
                
         $this->assertEquals('davert', $this->user->name);
 
-        $this->specify('i can fail here but test goes on', function() {
-            $this->fail('ups');
-        });
-        $this->assertTrue(true);
+        try {
+            $this->specify('i can fail here but test goes on', function() {
+                $this->fail('ups');
+            });
+            $this->assertTrue(true);
+        } catch (\PHPUnit_Framework_AssertionFailedError $f) {
+
+        }
     }
 
 }

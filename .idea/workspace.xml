@@ -7,7 +7,7 @@
     <file path="/composer.json" changelist="4c856521-2e42-4144-b49b-b8d24f6d8997" time="1374717654095" ignored="false" />
     <file path="/Specify.php" changelist="4c856521-2e42-4144-b49b-b8d24f6d8997" time="1374721107187" ignored="false" />
     <file path="/Dummy.txt" changelist="4c856521-2e42-4144-b49b-b8d24f6d8997" time="1374718010528" ignored="false" />
-    <file path="/SpecifyTest.php" changelist="4c856521-2e42-4144-b49b-b8d24f6d8997" time="1374721054127" ignored="false" />
+    <file path="/SpecifyTest.php" changelist="4c856521-2e42-4144-b49b-b8d24f6d8997" time="1374721761344" ignored="false" />
     <file path="/phpunit.xml" changelist="4c856521-2e42-4144-b49b-b8d24f6d8997" time="1374718129963" ignored="false" />
     <file path="/README.md" changelist="4c856521-2e42-4144-b49b-b8d24f6d8997" time="1374718996468" ignored="false" />
     <option name="TRACKING_ENABLED" value="true" />
@@ -45,7 +45,7 @@
       <file leaf-file-name="Specify.php" pinned="false" current="false" current-in-tab="false">
         <entry file="file://$PROJECT_DIR$/src/Codeception/Specify.php">
           <provider selected="true" editor-type-id="text-editor">
-            <state line="13" column="9" selection-start="316" selection-end="316" vertical-scroll-proportion="-8.814815">
+            <state line="21" column="8" selection-start="585" selection-end="639" vertical-scroll-proportion="-15.037037">
               <folding />
             </state>
           </provider>
@@ -54,7 +54,7 @@
       <file leaf-file-name="README.md" pinned="false" current="false" current-in-tab="false">
         <entry file="file://$PROJECT_DIR$/README.md">
           <provider selected="true" editor-type-id="text-editor">
-            <state line="24" column="0" selection-start="564" selection-end="564" vertical-scroll-proportion="0.0">
+            <state line="27" column="0" selection-start="646" selection-end="646" vertical-scroll-proportion="0.0">
               <folding />
             </state>
           </provider>
@@ -72,7 +72,7 @@
       <file leaf-file-name="SpecifyTest.php" pinned="false" current="true" current-in-tab="true">
         <entry file="file://$PROJECT_DIR$/tests/SpecifyTest.php">
           <provider selected="true" editor-type-id="text-editor">
-            <state line="23" column="32" selection-start="685" selection-end="685" vertical-scroll-proportion="0.8117647">
+            <state line="26" column="0" selection-start="779" selection-end="779" vertical-scroll-proportion="0.7529412">
               <folding />
             </state>
           </provider>
@@ -101,8 +101,8 @@
         <option value="$PROJECT_DIR$/phpunit.xml" />
         <option value="$PROJECT_DIR$/README.md" />
         <option value="$PROJECT_DIR$/vendor/phpunit/phpunit/PHPUnit/Framework/TestCase.php" />
-        <option value="$PROJECT_DIR$/tests/SpecifyTest.php" />
         <option value="$PROJECT_DIR$/src/Codeception/Specify.php" />
+        <option value="$PROJECT_DIR$/tests/SpecifyTest.php" />
       </list>
     </option>
   </component>
@@ -312,7 +312,7 @@
     </entry>
     <entry file="file://$PROJECT_DIR$/README.md">
       <provider selected="true" editor-type-id="text-editor">
-        <state line="24" column="0" selection-start="564" selection-end="564" vertical-scroll-proportion="0.0">
+        <state line="27" column="0" selection-start="646" selection-end="646" vertical-scroll-proportion="0.0">
           <folding />
         </state>
       </provider>
@@ -326,14 +326,14 @@
     </entry>
     <entry file="file://$PROJECT_DIR$/src/Codeception/Specify.php">
       <provider selected="true" editor-type-id="text-editor">
-        <state line="13" column="9" selection-start="316" selection-end="316" vertical-scroll-proportion="-8.814815">
+        <state line="21" column="8" selection-start="585" selection-end="639" vertical-scroll-proportion="-15.037037">
           <folding />
         </state>
       </provider>
     </entry>
     <entry file="file://$PROJECT_DIR$/tests/SpecifyTest.php">
       <provider selected="true" editor-type-id="text-editor">
-        <state line="23" column="32" selection-start="685" selection-end="685" vertical-scroll-proportion="0.8117647">
+        <state line="26" column="0" selection-start="779" selection-end="779" vertical-scroll-proportion="0.7529412">
           <folding />
         </state>
       </provider>
