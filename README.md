@@ -24,13 +24,13 @@ class UserTest extends PHPUnit_Framework_TestCase {
 		$this->assertInstanceOf('Model', $this->user);
 
 		$this->specify("username is required", function() {
-			$user->username = null,
+			$user->username = null;
 			verify($user->validate(['username'])->false());	
 		});
 
 		$this->specify("username is too long", function() {
 			$user->username = 'toolooooongnaaaaaaameeee',
-			verify($user->validate(['username'])->is_false);			
+			verify($user->validate(['username'])->false);			
 		});
 
 		// alternative, TDD assertions can be used too.
