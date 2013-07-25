@@ -1,0 +1,19 @@
+{
+    "name": "codeception/specify",
+    "description": "BDD code blocks for PHPUnit and Codeception",
+    "minimum-stability": "stable",
+    "authors": [
+        {
+            "name": "Michael Bodnarchuk",
+            "email": "davert.php@mailican.com"
+        }
+    ],
+    "require-dev": {
+        "phpunit/phpunit": "3.7.*"
+    },
+    "autoload": {
+        "psr-0": {
+            "Codeception\\": "src/"
+        }
+    }
+}
