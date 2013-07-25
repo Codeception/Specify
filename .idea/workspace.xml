@@ -5,7 +5,7 @@
     <ignored path="specify.iws" />
     <ignored path=".idea/workspace.xml" />
     <file path="/composer.json" changelist="4c856521-2e42-4144-b49b-b8d24f6d8997" time="1374717654095" ignored="false" />
-    <file path="/Specify.php" changelist="4c856521-2e42-4144-b49b-b8d24f6d8997" time="1374721107187" ignored="false" />
+    <file path="/Specify.php" changelist="4c856521-2e42-4144-b49b-b8d24f6d8997" time="1374755022323" ignored="false" />
     <file path="/Dummy.txt" changelist="4c856521-2e42-4144-b49b-b8d24f6d8997" time="1374718010528" ignored="false" />
     <file path="/SpecifyTest.php" changelist="4c856521-2e42-4144-b49b-b8d24f6d8997" time="1374721761344" ignored="false" />
     <file path="/phpunit.xml" changelist="4c856521-2e42-4144-b49b-b8d24f6d8997" time="1374718129963" ignored="false" />
@@ -45,7 +45,16 @@
       <file leaf-file-name="Specify.php" pinned="false" current="false" current-in-tab="false">
         <entry file="file://$PROJECT_DIR$/src/Codeception/Specify.php">
           <provider selected="true" editor-type-id="text-editor">
-            <state line="21" column="8" selection-start="585" selection-end="639" vertical-scroll-proportion="-15.037037">
+            <state line="21" column="20" selection-start="607" selection-end="607" vertical-scroll-proportion="-16.333334">
+              <folding />
+            </state>
+          </provider>
+        </entry>
+      </file>
+      <file leaf-file-name=".gitignore" pinned="false" current="false" current-in-tab="false">
+        <entry file="file://$PROJECT_DIR$/.gitignore">
+          <provider selected="true" editor-type-id="text-editor">
+            <state line="2" column="13" selection-start="26" selection-end="26" vertical-scroll-proportion="0.0">
               <folding />
             </state>
           </provider>
@@ -54,7 +63,7 @@
       <file leaf-file-name="README.md" pinned="false" current="false" current-in-tab="false">
         <entry file="file://$PROJECT_DIR$/README.md">
           <provider selected="true" editor-type-id="text-editor">
-            <state line="27" column="0" selection-start="646" selection-end="646" vertical-scroll-proportion="0.0">
+            <state line="27" column="0" selection-start="652" selection-end="652" vertical-scroll-proportion="0.0">
               <folding />
             </state>
           </provider>
@@ -72,7 +81,7 @@
       <file leaf-file-name="SpecifyTest.php" pinned="false" current="true" current-in-tab="true">
         <entry file="file://$PROJECT_DIR$/tests/SpecifyTest.php">
           <provider selected="true" editor-type-id="text-editor">
-            <state line="21" column="0" selection-start="609" selection-end="609" vertical-scroll-proportion="0.5764706">
+            <state line="20" column="71" selection-start="608" selection-end="608" vertical-scroll-proportion="0.5764706">
               <folding />
             </state>
           </provider>
@@ -168,6 +177,24 @@
             </PATH_ELEMENT>
             <PATH_ELEMENT>
               <option name="myItemId" value="tests" />
+              <option name="myItemType" value="com.intellij.ide.projectView.impl.nodes.PsiDirectoryNode" />
+            </PATH_ELEMENT>
+          </PATH>
+          <PATH>
+            <PATH_ELEMENT>
+              <option name="myItemId" value="specify" />
+              <option name="myItemType" value="com.intellij.ide.projectView.impl.nodes.ProjectViewProjectNode" />
+            </PATH_ELEMENT>
+            <PATH_ELEMENT>
+              <option name="myItemId" value="specify" />
+              <option name="myItemType" value="com.intellij.ide.projectView.impl.nodes.PsiDirectoryNode" />
+            </PATH_ELEMENT>
+            <PATH_ELEMENT>
+              <option name="myItemId" value="src" />
+              <option name="myItemType" value="com.intellij.ide.projectView.impl.nodes.PsiDirectoryNode" />
+            </PATH_ELEMENT>
+            <PATH_ELEMENT>
+              <option name="myItemId" value="Codeception" />
               <option name="myItemType" value="com.intellij.ide.projectView.impl.nodes.PsiDirectoryNode" />
             </PATH_ELEMENT>
           </PATH>
@@ -312,7 +339,7 @@
     </entry>
     <entry file="file://$PROJECT_DIR$/README.md">
       <provider selected="true" editor-type-id="text-editor">
-        <state line="27" column="0" selection-start="646" selection-end="646" vertical-scroll-proportion="0.0">
+        <state line="27" column="0" selection-start="652" selection-end="652" vertical-scroll-proportion="0.0">
           <folding />
         </state>
       </provider>
@@ -324,16 +351,37 @@
         </state>
       </provider>
     </entry>
+    <entry file="file://$PROJECT_DIR$/.gitignore">
+      <provider selected="true" editor-type-id="text-editor">
+        <state line="2" column="13" selection-start="26" selection-end="26" vertical-scroll-proportion="0.0">
+          <folding />
+        </state>
+      </provider>
+    </entry>
     <entry file="file://$PROJECT_DIR$/src/Codeception/Specify.php">
       <provider selected="true" editor-type-id="text-editor">
-        <state line="21" column="8" selection-start="585" selection-end="639" vertical-scroll-proportion="-15.037037">
+        <state line="21" column="20" selection-start="607" selection-end="607" vertical-scroll-proportion="-16.333334">
+          <folding />
+        </state>
+      </provider>
+    </entry>
+    <entry file="file://$PROJECT_DIR$/vendor/phpunit/phpunit/PHPUnit/Framework/IncompleteTestError.php">
+      <provider selected="true" editor-type-id="text-editor">
+        <state line="57" column="6" selection-start="2484" selection-end="2484" vertical-scroll-proportion="0.5412371">
+          <folding />
+        </state>
+      </provider>
+    </entry>
+    <entry file="file://$PROJECT_DIR$/vendor/phpunit/phpunit/PHPUnit/Framework/Assert.php">
+      <provider selected="true" editor-type-id="text-editor">
+        <state line="2808" column="41" selection-start="90696" selection-end="90696" vertical-scroll-proportion="0.4054983">
           <folding />
         </state>
       </provider>
     </entry>
     <entry file="file://$PROJECT_DIR$/tests/SpecifyTest.php">
       <provider selected="true" editor-type-id="text-editor">
-        <state line="21" column="0" selection-start="609" selection-end="609" vertical-scroll-proportion="0.5764706">
+        <state line="20" column="71" selection-start="608" selection-end="608" vertical-scroll-proportion="0.5764706">
           <folding />
         </state>
       </provider>

@@ -7,9 +7,10 @@ trait Specify {
 	{
         $properties = get_object_vars($this);
 
+        // cloning object properties
         foreach ($properties as $property => $val) {
             if (is_object($val)) {
-                $properties[$property] = clone($val);
+                $this->$property = clone($val);
             }
         }
         $test = $callable->bindTo($this);
@@ -23,6 +24,8 @@ trait Specify {
             $result->addFailure(clone($this), $f, $result->time());
         }
         $result->stopOnFailure(true);
+
+        // restoring object properties
         foreach ($properties as $property => $val) {
             $this->$property = $val;
         }
