@@ -45,4 +45,18 @@ class SpecifyTest extends \PHPUnit_Framework_TestCase {
         $this->assertEquals('davert', $this->user);
     }    
 
+    function testCleanSpecifyCallbacks()
+    {
+        $this->afterSpecify(function() {
+            $this->user = "davert";
+        });
+        $this->cleanSpecify();
+        $this->specify("user should be davert", function() {
+            $this->user = "jon";
+        });
+        $this->assertNull($this->user);
+
+
+    }
+
 }

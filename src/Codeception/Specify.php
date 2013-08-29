@@ -40,14 +40,19 @@ trait Specify {
         $this->setName($name);
 	}
 
-    function beforeSpecify(\Closure $callable)
+    function beforeSpecify(\Closure $callable = null)
     {
         $this->__beforeSpecify = $callable->bindTo($this);
     }
 
-    function afterSpecify(\Closure $callable)
+    function afterSpecify(\Closure $callable = null)
     {
         $this->__afterSpecify = $callable->bindTo($this);   
+    }
+
+    function cleanSpecify()
+    {
+        $this->__beforeSpecify = $this->__afterSpecify = null;
     }    
 
 
