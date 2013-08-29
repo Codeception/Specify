@@ -24,4 +24,25 @@ class SpecifyTest extends \PHPUnit_Framework_TestCase {
         $this->assertTrue(true);
     }
 
+    function testBeforeCallback()
+    {
+        $this->beforeSpecify(function() {
+            $this->user = "davert";
+        });
+        $this->specify("user should be davert", function() {
+            $this->assertEquals('davert', $this->user);
+        });
+    }
+
+    function testAfterCallback()
+    {
+        $this->afterSpecify(function() {
+            $this->user = "davert";
+        });
+        $this->specify("user should be davert", function() {
+            $this->user = "jon";
+        });
+        $this->assertEquals('davert', $this->user);
+    }    
+
 }
