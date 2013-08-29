@@ -80,6 +80,21 @@ $this->assertTrue(true);
 
 If a test fails you will specification text in the result.
 
+## Before/After
+
+There are also before and after callbacks, which act as setUp/tearDown but only for specify.
+
+``` php
+<?php
+$this->beforeSpecify(function() {
+	// prepare something;	
+});
+$this->afterSpecify(function() {
+	// reset something
+});
+$this->cleanSpecify(); // removes before/after callbacks
+?>
+```
 
 ## Installation
 
