@@ -70,6 +70,10 @@ class SpecifyTest extends \PHPUnit_Framework_TestCase {
         $this->specify('user is invalid', function() {
             throw new RuntimeException;
         }, ['throws' => new RuntimeException()]);
+
+        $this->specify('i can handle fails', function() {
+            $this->fail("Ok, I'm failing");
+        }, ['throws' => 'fail']);
     }
 
     public function testExamples()
@@ -81,5 +85,6 @@ class SpecifyTest extends \PHPUnit_Framework_TestCase {
             ['3', '9']
         ]]);
     }
+
 
 }
