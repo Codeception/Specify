@@ -55,8 +55,31 @@ class SpecifyTest extends \PHPUnit_Framework_TestCase {
             $this->user = "jon";
         });
         $this->assertNull($this->user);
+    }
 
+    public function testExceptions()
+    {
+        $this->specify('user is invalid', function() {
+            throw new Exception;
+        }, ['throws' => 'Exception']);
 
+        $this->specify('user is invalid', function() {
+            throw new RuntimeException;
+        }, ['throws' => 'RuntimeException']);
+
+        $this->specify('user is invalid', function() {
+            throw new RuntimeException;
+        }, ['throws' => new RuntimeException()]);
+    }
+
+    public function testExamples()
+    {
+        $this->specify('specify may contain examples', function($a, $b) {
+            $this->assertEquals($b, $a*$a);
+        }, ['examples' => [
+            ['2', '4'],
+            ['3', '9']
+        ]]);
     }
 
 }
