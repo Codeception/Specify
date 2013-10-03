@@ -34,28 +34,28 @@ class SpecifyTest extends \PHPUnit_Framework_TestCase {
         });
     }
 
-    // function testAfterCallback()
-    // {
-    //     $this->afterSpecify(function() {
-    //         $this->user = "davert";
-    //     });
-    //     $this->specify("user should be davert", function() {
-    //         $this->user = "jon";
-    //     });
-    //     $this->assertEquals('davert', $this->user);
-    // }    
+    function testAfterCallback()
+    {
+        $this->afterSpecify(function() {
+            $this->user = "davert";
+        });
+        $this->specify("user should be davert", function() {
+            $this->user = "jon";
+        });
+        $this->assertEquals('davert', $this->user);
+    }    
 
-    // function testCleanSpecifyCallbacks()
-    // {
-    //     $this->afterSpecify(function() {
-    //         $this->user = "davert";
-    //     });
-    //     $this->cleanSpecify();
-    //     $this->specify("user should be davert", function() {
-    //         $this->user = "jon";
-    //     });
-    //     $this->assertNull($this->user);
-    // }
+    function testCleanSpecifyCallbacks()
+    {
+        $this->afterSpecify(function() {
+            $this->user = "davert";
+        });
+        $this->cleanSpecify();
+        $this->specify("user should be davert", function() {
+            $this->user = "jon";
+        });
+        $this->assertNull($this->user);
+    }
 
     public function testExceptions()
     {
@@ -86,5 +86,9 @@ class SpecifyTest extends \PHPUnit_Framework_TestCase {
         ]]);
     }
 
+    function testOnlySpecifications()
+    {
+        $this->specify('should be valid');
+    }    
 
 }

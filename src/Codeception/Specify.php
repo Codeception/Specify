@@ -7,8 +7,9 @@ trait Specify {
     protected $__beforeSpecify;
     protected $__afterSpecify;
 
-	function specify($specification, \Closure $callable, $params = [])
+	function specify($specification, \Closure $callable = null, $params = [])
 	{
+        if (!$callable) return;
         // config
         $test = $callable->bindTo($this);
         $name = $this->getName();
