@@ -8,7 +8,7 @@ Inspired by MiniTest of Ruby now you combine BDD and classical TDD style in one 
 
 [![Build Status](https://travis-ci.org/Codeception/Specify.png?branch=master)](https://travis-ci.org/Codeception/Specify) [![Latest Stable Version](https://poser.pugx.org/codeception/specify/v/stable.png)](https://packagist.org/packages/codeception/specify)
 
-Additionaly, we recommend to combine this with [`codeception/verify`](https://github.com/Codeception/Verify) library, to get BDD style assertions.
+Additionaly, we recommend to combine this with [**Codeception/Verify**](https://github.com/Codeception/Verify) library, to get BDD style assertions.
 
 ``` php
 <?
