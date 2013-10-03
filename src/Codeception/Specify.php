@@ -13,7 +13,6 @@ trait Specify {
         $test = $callable->bindTo($this);
         $name = $this->getName();
         $this->setName($this->getName().' | '.$specification);
-        $this->getTestResultObject()->stopOnFailure(false);
 
         // copy current object properties
         $properties = get_object_vars($this);
@@ -41,7 +40,6 @@ trait Specify {
             if ($this->__afterSpecify instanceof \Closure) $this->__afterSpecify->__invoke();
         }
 
-        $this->getTestResultObject()->stopOnFailure(true);
         $this->setName($name);
 	}
 
@@ -88,9 +86,13 @@ trait Specify {
             }
         }
 
-        if ($throws and !isset($e)) {
-            $f = new \PHPUnit_Framework_AssertionFailedError("exception '$throws' was not thrown as expected");
-            $result->addFailure(clone($this), $f, $result->time());
+        if ($throws) {
+            if (isset($e)) {
+                $this->assertTrue(true, 'exception handled');
+            } else {
+                $f = new \PHPUnit_Framework_AssertionFailedError("exception '$throws' was not thrown as expected");
+                $result->addFailure(clone($this), $f, $result->time());                
+            }
         }
     }
 
