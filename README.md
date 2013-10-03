@@ -80,6 +80,60 @@ $this->assertTrue(true);
 
 If a test fails you will specification text in the result.
 
+## Exceptions
+
+You can wait for exception thronw inside a block.
+
+``` php
+<?php
+
+$this->specify('404 if user does not exist', function() {
+	$this->userController->show(999);
+}, ['throws' => 'NotFoundException']);
+
+// alternatively
+$this->specify('404 if user does not exist', function() {
+	$this->userController->show(999);
+}, ['throws' => new NotFoundException]);
+?>
+```
+
+Also you can handle fails inside a block. 
+
+``` php
+<?php
+
+$this->specify('this assertion is failing', function() {
+	$this->assertEquals(2, 3+5);
+}, ['throws' => 'fail']);
+?>
+```
+
+## Examples
+
+DataProviders alternative. Quite useful for basic data providers.
+
+``` php
+<?php
+$this->specify("should calculate square numbers", function($number, $square) {
+	$this->assertEquals($square, $number*$number);
+}, ['examples' => [
+		[2,4],
+		[3,9]
+]]);
+?>
+```
+
+You can also use DataProvider functions in `examples` param.
+
+``` php
+<?php
+$this->specify("should calculate square numbers", function($number, $square) {
+	$this->assertEquals($square, $number*$number);
+}, ['examples' => $this->provider()]);
+?>
+```
+
 ## Before/After
 
 There are also before and after callbacks, which act as setUp/tearDown but only for specify.
