@@ -81,9 +81,13 @@ trait Specify {
         } catch (\PHPUnit_Framework_AssertionFailedError $e) {
             if ($throws !== get_class($e)) $result->addFailure(clone($this), $e, $result->time());
         } catch (\Exception $e) {
-            if ($throws and ($throws !== get_class($e))) {
-                $f = new \PHPUnit_Framework_AssertionFailedError("exception '$throws' was expected, but " . get_class($e) . ' was thrown');
-                $result->addFailure(clone($this), $f, $result->time());
+            if ($throws) {
+                if ($throws !== get_class($e)) {
+                    $f = new \PHPUnit_Framework_AssertionFailedError("exception '$throws' was expected, but " . get_class($e) . ' was thrown');
+                    $result->addFailure(clone($this), $f, $result->time());
+                }
+            } else {
+                throw $e;
             }
         }
 
