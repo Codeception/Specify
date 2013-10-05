@@ -76,6 +76,16 @@ class SpecifyTest extends \PHPUnit_Framework_TestCase {
         }, ['throws' => 'fail']);
     }
 
+    /**
+     * @expectedException RuntimeException
+     */
+    public function testFailWhenUnexpectedExceptionHappens()
+    {
+        $this->specify('i bubble exception up if no throws is defined', function() {
+            throw new RuntimeException;
+        });
+    }
+
     public function testExamples()
     {
         $this->specify('specify may contain examples', function($a, $b) {
