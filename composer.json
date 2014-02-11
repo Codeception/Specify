@@ -9,7 +9,8 @@
         }
     ],
     "require": {
-        "php": ">=5.4.0"
+        "php": ">=5.4.0",
+        "myclabs/deep-copy": "*"
     },
     "require-dev": {
         "phpunit/phpunit": "3.7.*"

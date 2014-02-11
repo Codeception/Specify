@@ -6,6 +6,7 @@ class SpecifyTest extends \PHPUnit_Framework_TestCase {
     use Codeception\Specify;
 
     protected $user;
+    protected $a;
 
     public function testSpecification()
     {
@@ -99,6 +100,25 @@ class SpecifyTest extends \PHPUnit_Framework_TestCase {
     function testOnlySpecifications()
     {
         $this->specify('should be valid');
-    }    
+    }
 
+    public function testDeepCopy()
+    {
+        $this->a = new TestOne();
+        $this->a->prop = new TestOne();
+        $this->a->prop->prop = 1;
+        $this->specify('nested object can be changed', function() {
+            $this->assertEquals(1, $this->a->prop->prop);
+            $this->a->prop->prop = 2;
+            $this->assertEquals(2, $this->a->prop->prop);
+        });
+        $this->assertEquals(1, $this->a->prop->prop);
+        
+    }
+
+}
+
+class TestOne
+{
+    public $prop;
 }

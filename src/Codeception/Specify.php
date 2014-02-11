@@ -15,16 +15,16 @@ trait Specify {
         $name = $this->getName();
         $this->setName($this->getName().' | '.$specification);
 
+        $copier = new \DeepCopy\DeepCopy();
         // copy current object properties
         $properties = get_object_vars($this);
         foreach ($properties as $property => $val) {
             if ($property == '__beforeSpecify') continue;
             if ($property == '__afterSpecify') continue;
             if ($property == '__savedProperties') continue;
-            if (is_object($val)) {
-                $this->$property = clone($val);
-            }
+            $this->$property = $copier->copy($val);
         }
+
 
         // prepare for execution
         $throws = $this->getSpecifyExpectedException($params);
