@@ -1,5 +1,10 @@
 # Changelog
 
+#### 0.3.6 03/22/2014
+
+* Cloning unclonnable items
+
+
 #### 0.3.5 03/22/2014
 
 * Updated to DeepCopy 1.1.0
