@@ -16,6 +16,7 @@ trait Specify {
         $this->setName($this->getName().' | '.$specification);
 
         $copier = new \DeepCopy\DeepCopy();
+        $copier->skipUncloneable();
         // copy current object properties
         $properties = get_object_vars($this);
         foreach ($properties as $property => $val) {
