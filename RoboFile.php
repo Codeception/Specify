@@ -4,6 +4,8 @@ class Robofile extends \Robo\Tasks
 {
     public function release()
     {
+        $this->test();
+
         $version = file_get_contents('VERSION');
         // ask for changes in this release
         $changelog = $this->taskChangelog()
@@ -26,4 +28,9 @@ class Robofile extends \Robo\Tasks
     }
 
 
+    public function test()
+    {
+        $res = $this->taskPHPUnit()->run();
+        if (!$res) exit;
+    }
 }
