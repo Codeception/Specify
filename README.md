@@ -82,7 +82,7 @@ If a test fails you will specification text in the result.
 
 ## Exceptions
 
-You can wait for exception thronw inside a block.
+You can wait for exception thrown inside a block.
 
 ``` php
 <?php
