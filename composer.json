@@ -1,5 +1,5 @@
 {
-    "name": "codeception/specify",
+    "name": "pandra/specify",
     "description": "BDD code blocks for PHPUnit and Codeception",
     "minimum-stability": "stable",
     "authors": [
