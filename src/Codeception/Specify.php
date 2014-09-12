@@ -23,6 +23,7 @@ trait Specify {
             if ($property == '__beforeSpecify') continue;
             if ($property == '__afterSpecify') continue;
             if ($property == '__savedProperties') continue;
+            if ($val instanceof Actor) continue;
             $this->$property = $copier->copy($val);
         }
 
