@@ -27,6 +27,7 @@ trait Specify {
             if ($property == '__savedProperties') continue;
             if ($val instanceof Actor) continue;
             if ($val instanceof EventDispatcher) continue;
+            if ($val instanceof Scenario) continue;
             $this->$property = $copier->copy($val);
         }
 
