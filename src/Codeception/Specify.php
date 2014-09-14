@@ -1,6 +1,8 @@
 <?php
 namespace Codeception;
 
+use Symfony\Component\EventDispatcher\EventDispatcher;
+
 trait Specify {
 
 
@@ -24,6 +26,7 @@ trait Specify {
             if ($property == '__afterSpecify') continue;
             if ($property == '__savedProperties') continue;
             if ($val instanceof Actor) continue;
+            if ($val instanceof EventDispatcher) continue;
             $this->$property = $copier->copy($val);
         }
 
