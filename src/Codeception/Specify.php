@@ -1,6 +1,9 @@
 <?php
 namespace Codeception;
 
+use Codeception\Lib\Parser;
+use Symfony\Component\EventDispatcher\EventDispatcher;
+
 trait Specify {
 
 
@@ -23,6 +26,10 @@ trait Specify {
             if ($property == '__beforeSpecify') continue;
             if ($property == '__afterSpecify') continue;
             if ($property == '__savedProperties') continue;
+            if ($val instanceof Actor) continue;
+            if ($val instanceof EventDispatcher) continue;
+            if ($val instanceof Scenario) continue;
+            if ($val instanceof Parser) continue;
             $this->$property = $copier->copy($val);
         }
 
