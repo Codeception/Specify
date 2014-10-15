@@ -2,7 +2,7 @@
 
 #### 0.4.0
 
-* Fixes cloning properties in examples. Issue #7 *2014-10-15*
+* Fixes cloning properties in examples. Issue #6 *2014-10-15*
 * added global and local specify configs, for disabling cloning properties and changing cloning methods *2014-10-15*
 
 
