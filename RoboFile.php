@@ -7,11 +7,6 @@ class Robofile extends \Robo\Tasks
         $this->test();
 
         $version = file_get_contents('VERSION');
-        // ask for changes in this release
-        $changelog = $this->taskChangelog()
-            ->version($version)
-            ->askForChanges()
-            ->run();
 
         // adding changelog and pushing it
         $this->taskGit()
@@ -24,6 +19,14 @@ class Robofile extends \Robo\Tasks
         $this->taskGitHubRelease($version)
             ->uri('Codeception/Specify')
             ->askDescription()
+            ->run();
+    }
+
+    public function changed($description)
+    {
+        $this->taskChangelog()
+            ->version(file_get_contents('VERSION'))
+            ->change($description)
             ->run();
     }
 
