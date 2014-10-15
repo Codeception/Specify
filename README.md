@@ -166,4 +166,45 @@ Install with Composer:
 ```
 Include `Codeception\Specifiy` trait into your test.
 
+## Configuration
+
+Specify clones all properties of current testcase for all specify blocks.
+By default Specify clones all objects using deep cloning method.
+This behavior can be customized in order to speed up test execution by preventing some objects from cloning or switching to shallow cloning using `clone` operator.
+
+### Global
+
+Configation can be set globally
+
+```php
+<?php
+// globally disabling cloning of properties
+Codeception\Specify\Config::setIgnoredProperties(['user', 'repository']);
+?>
+```
+
+See complete [reference](https://github.com/Codeception/Specify/blob/master/docs/GlobalConfig.md).
+
+### Local
+
+Configuring can be done locally per test case
+
+```php
+<?php
+class UserTest extends \PHPUnit_Framework_TestCase
+{
+    use Codeception\Specify;
+
+    function testUser()
+    {
+        // do not deep clone user property
+        $this->specifyConfig()
+            ->shallowClone('user');
+    }
+}
+```
+
+[Reference](https://github.com/Codeception/Specify/blob/master/docs/LocalConfig.md)
+
+
 License: MIT
