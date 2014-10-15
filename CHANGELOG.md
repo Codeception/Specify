@@ -1,5 +1,10 @@
 # Changelog
 
+#### 0.4.0
+
+* added global and local specify configs, for disabling cloning properties and changing cloning methods *2014-10-15*
+
+
 #### 0.3.6 03/22/2014
 
 * Cloning unclonnable items

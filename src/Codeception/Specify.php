@@ -1,29 +1,55 @@
 <?php
 namespace Codeception;
 
+use Codeception\Specify\Config;
+use Codeception\Specify\ConfigBuilder;
+
 trait Specify {
 
+    private $beforeSpecify;
+    private $afterSpecify;
 
-    protected $__beforeSpecify;
-    protected $__afterSpecify;
+    /**
+     * @var Specify\Config
+     */
+    private $specifyConfig;
+
+    /**
+     * @var \DeepCopy\DeepCopy()
+     */
+    private $copier;
+
+    private function specifyInit()
+    {
+        if ($this->copier) return;
+        $this->copier = new \DeepCopy\DeepCopy();
+        $this->copier->skipUncloneable();
+        if (!$this->specifyConfig) $this->specifyConfig = Config::create();
+    }
 
 	function specify($specification, \Closure $callable = null, $params = [])
 	{
         if (!$callable) return;
-        // config
+        $this->specifyInit();
+
         $test = $callable->bindTo($this);
         $name = $this->getName();
         $this->setName($this->getName().' | '.$specification);
 
-        $copier = new \DeepCopy\DeepCopy();
-        $copier->skipUncloneable();
         // copy current object properties
         $properties = get_object_vars($this);
         foreach ($properties as $property => $val) {
-            if ($property == '__beforeSpecify') continue;
-            if ($property == '__afterSpecify') continue;
-            if ($property == '__savedProperties') continue;
-            $this->$property = $copier->copy($val);
+            if ($this->specifyConfig->propertyIgnored($property)) continue;
+            if ($this->specifyConfig->classIgnored($val)) continue;
+
+            if ($this->specifyConfig->propertyIsShallowCloned($property)) {
+                if (is_object($val)) {
+                    $this->$property = clone $val;
+                }
+            }
+            if ($this->specifyConfig->propertyIsDeeplyCloned($property)) {
+                $this->$property = $this->copier->copy($val);
+            }
         }
 
 
@@ -32,14 +58,15 @@ trait Specify {
         $examples = $this->getSpecifyExamples($params);
 
         foreach ($examples as $example) {
-            if ($this->__beforeSpecify instanceof \Closure) $this->__beforeSpecify->__invoke();
+            if ($this->beforeSpecify instanceof \Closure) $this->beforeSpecify->__invoke();
             $this->specifyExecute($test, $throws, $example);
 
             // restore class properties
             foreach ($properties as $property => $val) {
+                if (in_array($property, $this->specifyConfig->ignore)) continue;
                 $this->$property = $val;
             }
-            if ($this->__afterSpecify instanceof \Closure) $this->__afterSpecify->__invoke();
+            if ($this->afterSpecify instanceof \Closure) $this->afterSpecify->__invoke();
         }
 
         $this->setName($name);
@@ -102,19 +129,24 @@ trait Specify {
         }
     }
 
+    public function specifyConfig()
+    {
+        return new ConfigBuilder($this->specifyConfig);
+    }
+
     function beforeSpecify(\Closure $callable = null)
     {
-        $this->__beforeSpecify = $callable->bindTo($this);
+        $this->beforeSpecify = $callable->bindTo($this);
     }
 
     function afterSpecify(\Closure $callable = null)
     {
-        $this->__afterSpecify = $callable->bindTo($this);   
+        $this->afterSpecify = $callable->bindTo($this);
     }
 
     function cleanSpecify()
     {
-        $this->__beforeSpecify = $this->__afterSpecify = null;
+        $this->beforeSpecify = $this->afterSpecify = null;
     }    
 
 

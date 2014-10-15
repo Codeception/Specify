@@ -116,6 +116,37 @@ class SpecifyTest extends \PHPUnit_Framework_TestCase {
         
     }
 
+    public function testConfiguration()
+    {
+        $this->specifyConfig()
+            ->ignore('user');
+
+        $this->specify("user should be jon", function() {
+            $this->user = "jon";
+        });
+
+        $this->specifyConfig()
+            ->ignore(['user']);
+
+        $this->specify("user should be davert", function() {
+            $this->user = "davert";
+        });
+
+        $this->a = new TestOne();
+        $this->a->prop = new TestOne();
+        $this->a->prop->prop = 1;
+
+        $this->specifyConfig()
+            ->shallowClone('a');
+
+        $this->specify("user should be davert", function() {
+            $this->a->prop->prop = "davert";
+        });
+
+        $this->assertEquals("davert", $this->a->prop->prop);
+
+    }
+
 }
 
 class TestOne
