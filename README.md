@@ -86,7 +86,7 @@ By default objects are cloned using deep cloning method.
 This behavior can be customized in order to speed up test execution by preventing some objects from cloning or switching to shallow cloning using `clone` operator.
 Some properties can be ignored from cloning using either global or local config settings.
 
-### Global
+### Global Configuration
 
 Cloning configuration can be set globally
 
@@ -99,7 +99,7 @@ Codeception\Specify\Config::setIgnoredProperties(['user', 'repository']);
 
 See complete [reference](https://github.com/Codeception/Specify/blob/master/docs/GlobalConfig.md).
 
-### Local
+### Local Configuration
 
 Configuring can be done locally per test case
 
