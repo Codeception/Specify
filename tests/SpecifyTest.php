@@ -164,6 +164,18 @@ class SpecifyTest extends \PHPUnit_Framework_TestCase {
         $this->assertEquals(['hello', 'world'], $this->testOne->prop);
     }
 
+//    public function testFail()
+//    {
+//        $this->specify('this will fail', function(){
+//            $this->assertTrue(false);
+//        });
+//
+//        $this->specify('this will fail too', function(){
+//            echo "executed";
+//            $this->assertTrue(true);
+//        }, ['throws' => 'Exception']);
+//    }
+
 }
 
 class TestOne

@@ -44,19 +44,7 @@ trait Specify {
 
         foreach ($examples as $example) {
             // copy current object properties
-            foreach ($properties as $property => $val) {
-                if ($this->specifyConfig->propertyIgnored($property)) continue;
-                if ($this->specifyConfig->classIgnored($val)) continue;
-
-                if ($this->specifyConfig->propertyIsShallowCloned($property)) {
-                    if (is_object($val)) {
-                        $this->$property = clone $val;
-                    }
-                }
-                if ($this->specifyConfig->propertyIsDeeplyCloned($property)) {
-                    $this->$property = $this->copier->copy($val);
-                }
-            }
+            $this->specifyCloneProperties($properties);
 
             if ($this->beforeSpecify instanceof \Closure) $this->beforeSpecify->__invoke();
             $this->specifyExecute($test, $throws, $example);
@@ -125,7 +113,7 @@ trait Specify {
                 $this->assertTrue(true, 'exception handled');
             } else {
                 $f = new \PHPUnit_Framework_AssertionFailedError("exception '$throws' was not thrown as expected");
-                $result->addFailure(clone($this), $f, $result->time());                
+                $result->addFailure(clone($this), $f, $result->time());
             }
         }
     }
@@ -148,7 +136,32 @@ trait Specify {
     function cleanSpecify()
     {
         $this->beforeSpecify = $this->afterSpecify = null;
-    }    
+    }
 
+    /**
+     * @param $properties
+     * @return array
+     */
+    private function specifyCloneProperties($properties)
+    {
+        foreach ($properties as $property => $val) {
+            if ($this->specifyConfig->propertyIgnored($property)) {
+                continue;
+            }
+            if ($this->specifyConfig->classIgnored($val)) {
+                continue;
+            }
 
+            if ($this->specifyConfig->propertyIsShallowCloned($property)) {
+                if (is_object($val)) {
+                    $this->$property = clone $val;
+                } else {
+                    $this->$property = $val;
+                }
+            }
+            if ($this->specifyConfig->propertyIsDeeplyCloned($property)) {
+                $this->$property = $this->copier->copy($val);
+            }
+        }
+    }
 }

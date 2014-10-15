@@ -34,7 +34,8 @@ class Config
         'dependencies',
         'dependencyInput',
         'tester',
-        'guy'
+        'guy',
+        'name'
     ];
 
     protected static $deepClone = true;
