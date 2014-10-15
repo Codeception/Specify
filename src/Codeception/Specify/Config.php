@@ -33,6 +33,7 @@ class Config
         // Codeception
         'dependencies',
         'dependencyInput',
+        'tester'
     ];
 
     protected static $deepClone = true;
