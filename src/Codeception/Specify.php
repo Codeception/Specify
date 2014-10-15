@@ -36,32 +36,32 @@ trait Specify {
         $name = $this->getName();
         $this->setName($this->getName().' | '.$specification);
 
-        // copy current object properties
         $properties = get_object_vars($this);
-        foreach ($properties as $property => $val) {
-            if ($this->specifyConfig->propertyIgnored($property)) continue;
-            if ($this->specifyConfig->classIgnored($val)) continue;
-
-            if ($this->specifyConfig->propertyIsShallowCloned($property)) {
-                if (is_object($val)) {
-                    $this->$property = clone $val;
-                }
-            }
-            if ($this->specifyConfig->propertyIsDeeplyCloned($property)) {
-                $this->$property = $this->copier->copy($val);
-            }
-        }
-
 
         // prepare for execution
         $throws = $this->getSpecifyExpectedException($params);
         $examples = $this->getSpecifyExamples($params);
 
         foreach ($examples as $example) {
+            // copy current object properties
+            foreach ($properties as $property => $val) {
+                if ($this->specifyConfig->propertyIgnored($property)) continue;
+                if ($this->specifyConfig->classIgnored($val)) continue;
+
+                if ($this->specifyConfig->propertyIsShallowCloned($property)) {
+                    if (is_object($val)) {
+                        $this->$property = clone $val;
+                    }
+                }
+                if ($this->specifyConfig->propertyIsDeeplyCloned($property)) {
+                    $this->$property = $this->copier->copy($val);
+                }
+            }
+
             if ($this->beforeSpecify instanceof \Closure) $this->beforeSpecify->__invoke();
             $this->specifyExecute($test, $throws, $example);
 
-            // restore class properties
+            // restore object properties
             foreach ($properties as $property => $val) {
                 if (in_array($property, $this->specifyConfig->ignore)) continue;
                 $this->$property = $val;
@@ -69,6 +69,7 @@ trait Specify {
             if ($this->afterSpecify instanceof \Closure) $this->afterSpecify->__invoke();
         }
 
+        // restore test name
         $this->setName($name);
 	}
 
@@ -80,7 +81,7 @@ trait Specify {
     private function getSpecifyExamples($params)
     {
         if (isset($params['examples'])) {
-            if (!is_array($params['examples'])) throw new \RuntimeException("Examples should be array");
+            if (!is_array($params['examples'])) throw new \RuntimeException("Examples should be an array");
             return $params['examples'];
         }
         return [[]];

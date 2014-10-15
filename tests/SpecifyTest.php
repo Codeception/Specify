@@ -144,7 +144,24 @@ class SpecifyTest extends \PHPUnit_Framework_TestCase {
         });
 
         $this->assertEquals("davert", $this->a->prop->prop);
+    }
 
+    /**
+     * @Issue https://github.com/Codeception/Specify/issues/6
+     */
+    function testPropertyRestore()
+    {
+        $this->testOne = new testOne();
+        $this->testOne->prop = ['hello', 'world'];
+
+        $this->specify('array contains hello+world', function ($testData) {
+            $this->testOne->prop = ['bye', 'world'];
+            $this->assertContains($testData, $this->testOne->prop);
+        }, ['examples' => [
+            ['bye'],
+            ['world'],
+        ]]);
+        $this->assertEquals(['hello', 'world'], $this->testOne->prop);
     }
 
 }
