@@ -9,13 +9,6 @@ class Robofile extends \Robo\Tasks
 
         $version = file_get_contents('VERSION');
 
-        // adding changelog and pushing it
-        $this->taskGit()
-            ->add('CHANGELOG.md')
-            ->commit('updated changelog')
-            ->push()
-            ->run();
-
         // create GitHub release
         $this->taskGitHubRelease($version)
             ->uri('Codeception/Specify')

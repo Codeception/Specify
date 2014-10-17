@@ -30,5 +30,13 @@ class ConfigTest extends \PHPUnit_Framework_TestCase
         $this->assertTrue($this->config->propertyIsDeeplyCloned('user'));
     }
 
+    public function testConfigOnly()
+    {
+        $this->config->deep = ['user', 'post', 'tag'];
+        $this->config->only = ['user'];
+//        $this->assertFalse($this->config->propertyIgnored('user'));
+//        $this->assertTrue($this->config->propertyIgnored('post'));
+    }
+
 }
 

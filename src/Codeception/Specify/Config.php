@@ -45,9 +45,13 @@ class Config
     public $ignore_classes = array();
     public $shallow = array();
     public $deep = array();
+    public $only = null;
 
     public function propertyIgnored($property)
     {
+        if ($this->only) {
+            return !in_array($property, $this->only);
+        }
         return in_array($property, $this->ignore);
     }
 
@@ -59,6 +63,9 @@ class Config
 
     public function propertyIsShallowCloned($property)
     {
+        if ($this->only and !$this->is_deep) {
+            return in_array($property, $this->only);
+        }
         if (!$this->is_deep and !in_array($property, $this->deep)) {
             return true;
         }
@@ -67,6 +74,9 @@ class Config
 
     public function propertyIsDeeplyCloned($property)
     {
+        if ($this->only and $this->is_deep) {
+            return in_array($property, $this->only);
+        }
         if ($this->is_deep and !in_array($property, $this->shallow)) {
             return true;
         }
@@ -140,6 +150,7 @@ class Config
         $config->ignore_classes = self::$ignoredClasses;
         $config->shallow = array();
         $config->deep = array();
+        $config->only = null;
         return $config;
     }
 }

@@ -146,6 +146,21 @@ class SpecifyTest extends \PHPUnit_Framework_TestCase {
         $this->assertEquals("davert", $this->a->prop->prop);
     }
 
+    public function testCloneOnly()
+    {
+        $this->specifyConfig()
+            ->cloneOnly('user');
+
+        $this->user = "bob";
+        $this->a = "rob";
+        $this->specify("user should be jon", function() {
+            $this->user = "jon";
+            $this->a = 'alice';
+        });
+        $this->assertEquals('bob', $this->user);
+        $this->assertEquals('alice', $this->a);
+    }
+
     /**
      * @Issue https://github.com/Codeception/Specify/issues/6
      */

@@ -51,7 +51,7 @@ trait Specify {
 
             // restore object properties
             foreach ($properties as $property => $val) {
-                if (in_array($property, $this->specifyConfig->ignore)) continue;
+                if ($this->specifyConfig->propertyIgnored($property)) continue;
                 $this->$property = $val;
             }
             if ($this->afterSpecify instanceof \Closure) $this->afterSpecify->__invoke();
@@ -120,6 +120,7 @@ trait Specify {
 
     public function specifyConfig()
     {
+        if (!$this->specifyConfig) $this->specifyConfig = Config::create();
         return new ConfigBuilder($this->specifyConfig);
     }
 

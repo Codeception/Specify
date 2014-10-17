@@ -148,4 +148,25 @@ class ConfigBuilder
         $this->config->shallow = array_merge($this->config->shallow, $properties);
         return $this;
     }
+
+    /**
+     * Clone only specific properties
+     *
+     * ```php
+     * <?php
+     * $this->specifyConfig()->cloneOnly('user', 'post');
+     * ?>
+     * ```
+     *
+     * @param $properties
+     * @return $this
+     */
+    public function cloneOnly($properties)
+    {
+        if (!is_array($properties)) {
+            $properties = func_get_args();
+        }
+        $this->config->only = $properties;
+        return $this;
+    }
 } 
