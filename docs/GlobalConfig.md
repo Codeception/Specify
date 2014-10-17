@@ -18,6 +18,7 @@ Global Specify configuration. Should be set in bootstrap.
 
 
 
+
 #### *public* propertyIgnored($property) 
 #### *public* classIgnored($value) 
 #### *public* propertyIsShallowCloned($property) 

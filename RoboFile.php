@@ -8,6 +8,8 @@ class Robofile extends \Robo\Tasks
         $this->test();
 
         $version = file_get_contents('VERSION');
+        
+        $this->docs();
 
         // create GitHub release
         $this->taskGitHubRelease($version)

@@ -94,3 +94,15 @@ $this->specifyConfig()->shallowClone(['user', 'tag']);
  * `param bool` $properties
  * `return` $this
 
+#### *public* cloneOnly($properties) 
+Clone only specific properties
+
+```php
+<?php
+$this->specifyConfig()->cloneOnly('user', 'post');
+?>
+```
+
+ * `param` $properties
+ * `return` $this
+
