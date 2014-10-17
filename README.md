@@ -118,6 +118,35 @@ class UserTest extends \PHPUnit_Framework_TestCase
 }
 ```
 
+Only specific properties can be preserved in specify blocks:
+
+```php
+<?php
+class UserTest extends \PHPUnit_Framework_TestCase
+{
+    use Codeception\Specify;
+    protected $user;
+    protected $post;
+
+    function testUser()
+    {
+        $this->user = 'davert';
+        $this->post = 'hello world';
+
+        $this->specifyConfig()
+            ->cloneOnly('user');
+
+        $this->specify('post is not cloned', function() {
+            $this->user = 'john';
+            $this->post = 'bye world';
+        });
+        $this->assertEquals('davert', $this->user); // user is restored
+        $this->assertEquals('bye world', $this->post); // post was not stored
+    }
+}
+```
+
+
 [Reference](https://github.com/Codeception/Specify/blob/master/docs/LocalConfig.md)
 
 
