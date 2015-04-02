@@ -6,8 +6,8 @@ use Codeception\Specify\ConfigBuilder;
 
 trait Specify {
 
-    private $beforeSpecify;
-    private $afterSpecify;
+    private $beforeSpecify = array();
+    private $afterSpecify = array();
 
     /**
      * @var Specify\Config
@@ -46,7 +46,11 @@ trait Specify {
             // copy current object properties
             $this->specifyCloneProperties($properties);
 
-            if ($this->beforeSpecify instanceof \Closure) $this->beforeSpecify->__invoke();
+            if (!empty($this->beforeSpecify) && is_array($this->beforeSpecify)) {
+                foreach ($this->beforeSpecify as $closure) {
+                    if ($closure instanceof \Closure) $closure->__invoke();
+                }
+            }
             $this->specifyExecute($test, $throws, $example);
 
             // restore object properties
@@ -54,7 +58,11 @@ trait Specify {
                 if ($this->specifyConfig->propertyIgnored($property)) continue;
                 $this->$property = $val;
             }
-            if ($this->afterSpecify instanceof \Closure) $this->afterSpecify->__invoke();
+            if (!empty($this->afterSpecify) && is_array($this->afterSpecify)) {
+                foreach ($this->afterSpecify as $closure) {
+                    if ($closure instanceof \Closure) $closure->__invoke();
+                }
+            }
         }
 
         // restore test name
@@ -126,17 +134,17 @@ trait Specify {
 
     function beforeSpecify(\Closure $callable = null)
     {
-        $this->beforeSpecify = $callable->bindTo($this);
+        $this->beforeSpecify[] = $callable->bindTo($this);
     }
 
     function afterSpecify(\Closure $callable = null)
     {
-        $this->afterSpecify = $callable->bindTo($this);
+        $this->afterSpecify[] = $callable->bindTo($this);
     }
 
     function cleanSpecify()
     {
-        $this->beforeSpecify = $this->afterSpecify = null;
+        $this->beforeSpecify = $this->afterSpecify = array();
     }
 
     /**

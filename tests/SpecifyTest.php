@@ -35,6 +35,19 @@ class SpecifyTest extends \PHPUnit_Framework_TestCase {
         });
     }
 
+    function testMultiBeforeCallback()
+    {
+        $this->beforeSpecify(function() {
+            $this->user = "davert";
+        });
+        $this->beforeSpecify(function() {
+            $this->user .= "jon";
+        });
+        $this->specify("user should be davertjon", function() {
+            $this->assertEquals('davertjon', $this->user);
+        });
+    }
+
     function testAfterCallback()
     {
         $this->afterSpecify(function() {
@@ -45,6 +58,20 @@ class SpecifyTest extends \PHPUnit_Framework_TestCase {
         });
         $this->assertEquals('davert', $this->user);
     }    
+
+    function testMultiAfterCallback()
+    {
+        $this->afterSpecify(function() {
+            $this->user = "davert";
+        });
+        $this->afterSpecify(function() {
+            $this->user .= "jon";
+        });
+        $this->specify("user should be davertjon", function() {
+            $this->user = "jon";
+        });
+        $this->assertEquals('davertjon', $this->user);
+    }
 
     function testCleanSpecifyCallbacks()
     {
