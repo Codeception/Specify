@@ -31,13 +31,13 @@ class UserTest extends PHPUnit_Framework_TestCase {
 		});
 
 		$this->specify("username is too long", function() {
-			$user->username = 'toolooooongnaaaaaaameeee',
+			$this->user->username = 'toolooooongnaaaaaaameeee',
 			verify($user->validate(['username'])->false());			
 		});
 
 		// alternative, TDD assertions can be used too.
 		$this->specify("username is ok", function() {
-			$user->username = 'davert',
+			$this->user->username = 'davert',
 			$this->assertTrue($user->validate(['username']));			
 		});				
 	}
@@ -227,7 +227,7 @@ $this->cleanSpecify(); // removes before/after callbacks
 Install with Composer:
 
 
-```
+```json
 "require-dev": {
     "codeception/specify": "*",
     "codeception/verify": "*"
