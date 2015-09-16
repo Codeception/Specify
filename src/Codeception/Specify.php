@@ -85,30 +85,54 @@ trait Specify {
 
     private function getSpecifyExpectedException($params)
     {
-        $throws = false;
         if (isset($params['throws'])) {
-            $throws = $params['throws'];
+            $throws = (is_array($params['throws'])) ? $params['throws'][0] : $params['throws'];
+
             if (is_object($throws)) {
                 $throws = get_class($throws);
             }
             if ($throws === 'fail') {
                 $throws = 'PHPUnit_Framework_AssertionFailedError';
             }
+
+            $message = (is_array($params['throws']) && isset($params['throws'][1])) ? $params['throws'][1] : false;
+
+            return [$throws, $message];
         }
-        return $throws;
+
+        return false;
     }
 
     private function specifyExecute($test, $throws = false, $examples = array())
     {
+        $message = false;
+
+        if (is_array($throws)) {
+            $message = $throws[1];
+            $throws = $throws[0];
+        }
+
         $result = $this->getTestResultObject();
         try {
             call_user_func_array($test, $examples);
         } catch (\PHPUnit_Framework_AssertionFailedError $e) {
-            if ($throws !== get_class($e)) $result->addFailure(clone($this), $e, $result->time());
+            if ($throws !== get_class($e)){
+                $result->addFailure(clone($this), $e, $result->time());
+            }
+
+            if ($message !==false && $message !== $e->getMessage()) {
+                $f = new \PHPUnit_Framework_AssertionFailedError("exception message '$message' was expected, but '" . $e->getMessage() . "' was received");
+                $result->addFailure(clone($this), $f, $result->time());
+            }
         } catch (\Exception $e) {
             if ($throws) {
                 if ($throws !== get_class($e)) {
                     $f = new \PHPUnit_Framework_AssertionFailedError("exception '$throws' was expected, but " . get_class($e) . ' was thrown');
+                    $result->addFailure(clone($this), $f, $result->time());
+                }
+
+                if ($message !==false && $message !== $e->getMessage()) {
+                    $f = new \PHPUnit_Framework_AssertionFailedError("exception message '$message' was expected, but '" . $e->getMessage() . "' was received");
                     $result->addFailure(clone($this), $f, $result->time());
                 }
             } else {
