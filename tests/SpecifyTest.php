@@ -125,6 +125,10 @@ class SpecifyTest extends \PHPUnit_Framework_TestCase {
         $this->specify('ignores an empty message', function() {
             $this->fail("test message");
         }, ['throws' => ['fail']]);
+
+        $this->specify('mixed case exception messages', function() {
+            throw new RuntimeException("teSt mESSage");
+        }, ['throws' => ['RuntimeException', 'Test MessaGE']]);
     }
 
     /**

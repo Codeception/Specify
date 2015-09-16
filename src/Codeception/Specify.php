@@ -108,7 +108,7 @@ trait Specify {
         $message = false;
 
         if (is_array($throws)) {
-            $message = $throws[1];
+            $message = ($throws[1]) ? strtolower($throws[1]) : false;
             $throws = $throws[0];
         }
 
@@ -120,7 +120,7 @@ trait Specify {
                 $result->addFailure(clone($this), $e, $result->time());
             }
 
-            if ($message !==false && $message !== $e->getMessage()) {
+            if ($message !==false && $message !== strtolower($e->getMessage())) {
                 $f = new \PHPUnit_Framework_AssertionFailedError("exception message '$message' was expected, but '" . $e->getMessage() . "' was received");
                 $result->addFailure(clone($this), $f, $result->time());
             }
@@ -131,7 +131,7 @@ trait Specify {
                     $result->addFailure(clone($this), $f, $result->time());
                 }
 
-                if ($message !==false && $message !== $e->getMessage()) {
+                if ($message !==false && $message !== strtolower($e->getMessage())) {
                     $f = new \PHPUnit_Framework_AssertionFailedError("exception message '$message' was expected, but '" . $e->getMessage() . "' was received");
                     $result->addFailure(clone($this), $f, $result->time());
                 }
