@@ -12,13 +12,6 @@ Global Specify configuration. Should be set in bootstrap.
 ?>
 ```
 
-
-
-
-
-
-
-
 #### *public* propertyIgnored($property) 
 #### *public* classIgnored($value) 
 #### *public* propertyIsShallowCloned($property) 
@@ -51,7 +44,7 @@ Add specific classes to cloning ignore list. Instances of those classes won't be
 
  * `param` $ignoredClasses
 
-
 #### *public static* create() 
 @return Config
+
 

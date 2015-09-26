@@ -1,5 +1,9 @@
 # Changelog
 
+#### 0.4.2
+
+* Testing exception messages by @chrismichaels84 https://github.com/Codeception/Specify#exceptions
+
 #### 0.4.0
 
 * Fixes cloning properties in examples. Issue #6 *2014-10-15*
