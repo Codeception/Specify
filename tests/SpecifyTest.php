@@ -16,7 +16,7 @@ class SpecifyTest extends \PHPUnit_Framework_TestCase {
            $this->user->name = 'jon';
            $this->assertEquals('jon', $this->user->name);
         });
-               
+
         $this->assertEquals('davert', $this->user->name);
 
         $this->specify('i can fail here but test goes on', function() {
@@ -57,7 +57,7 @@ class SpecifyTest extends \PHPUnit_Framework_TestCase {
             $this->user = "jon";
         });
         $this->assertEquals('davert', $this->user);
-    }    
+    }
 
     function testMultiAfterCallback()
     {
@@ -104,6 +104,33 @@ class SpecifyTest extends \PHPUnit_Framework_TestCase {
         }, ['throws' => 'fail']);
     }
 
+    public function testExceptionsWithMessages()
+    {
+        $this->specify('user is invalid', function() {
+            throw new Exception("test message");
+        }, ['throws' => ['Exception', 'test message']]);
+
+        $this->specify('user is invalid', function() {
+            throw new RuntimeException("test message");
+        }, ['throws' => ['RuntimeException', 'test message']]);
+
+        $this->specify('user is invalid', function() {
+            throw new RuntimeException("test message");
+        }, ['throws' => [new RuntimeException(), "test message"]]);
+
+        $this->specify('i can handle fails', function() {
+            $this->fail("test message");
+        }, ['throws' => ['fail', 'test message']]);
+
+        $this->specify('ignores an empty message', function() {
+            $this->fail("test message");
+        }, ['throws' => ['fail']]);
+
+        $this->specify('mixed case exception messages', function() {
+            throw new RuntimeException("teSt mESSage");
+        }, ['throws' => ['RuntimeException', 'Test MessaGE']]);
+    }
+
     /**
      * @expectedException RuntimeException
      */
@@ -140,7 +167,7 @@ class SpecifyTest extends \PHPUnit_Framework_TestCase {
             $this->assertEquals(2, $this->a->prop->prop);
         });
         $this->assertEquals(1, $this->a->prop->prop);
-        
+
     }
 
     public function testConfiguration()

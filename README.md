@@ -179,6 +179,17 @@ $this->specify('this assertion is failing', function() {
 ?>
 ```
 
+In both cases, you can optionally test the exception message
+
+``` php
+<?php
+
+$this->specify('some exception with a message', function() {
+	throw new NotFoundException("my error message');
+}, ['throws' => ['NotFoundException', 'my error message']]);
+?>
+```
+
 ## Examples
 
 DataProviders alternative. Quite useful for basic data providers.
