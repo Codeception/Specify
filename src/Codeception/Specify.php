@@ -176,7 +176,7 @@ trait Specify {
      * @param $properties
      * @return array
      */
-    private function specifyCloneProperties($properties)
+    private function specifyCloneProperties($properties) 
     {
         foreach ($properties as $property => $val) {
             if ($this->specifyConfig->propertyIgnored($property)) {
