@@ -27,8 +27,8 @@ trait Specify {
         if (!$this->specifyConfig) $this->specifyConfig = Config::create();
     }
 
-	function specify($specification, \Closure $callable = null, $params = [])
-	{
+    function specify($specification, \Closure $callable = null, $params = [])
+    {
         if (!$callable) return;
         $this->specifyInit();
 
@@ -42,7 +42,8 @@ trait Specify {
         $throws = $this->getSpecifyExpectedException($params);
         $examples = $this->getSpecifyExamples($params);
 
-        foreach ($examples as $example) {
+        foreach ($examples as $idx => $example) {
+            $this->setName($name.' | '.$specification .' | examples index '. $idx);
             // copy current object properties
             $this->specifyCloneProperties($properties);
 
@@ -67,7 +68,7 @@ trait Specify {
 
         // restore test name
         $this->setName($name);
-	}
+    }
 
     /**
      * @param $params
@@ -175,7 +176,7 @@ trait Specify {
      * @param $properties
      * @return array
      */
-    private function specifyCloneProperties($properties)
+    private function specifyCloneProperties($properties) 
     {
         foreach ($properties as $property => $val) {
             if ($this->specifyConfig->propertyIgnored($property)) {
