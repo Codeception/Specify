@@ -42,7 +42,8 @@ trait Specify {
         $throws = $this->getSpecifyExpectedException($params);
         $examples = $this->getSpecifyExamples($params);
 
-        foreach ($examples as $example) {
+        foreach ($examples as $idx => $example) {
+            $this->setName($name.' | '.$specification .' | examples index '. $idx);
             // copy current object properties
             $this->specifyCloneProperties($properties);
 
