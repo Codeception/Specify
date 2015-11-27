@@ -1,5 +1,10 @@
 # Changelog
 
+#### 0.4.3
+
+* Show example index on failure by @zszucs *2015-11-27*
+
+
 #### 0.4.2
 
 * Testing exception messages by @chrismichaels84 https://github.com/Codeception/Specify#exceptions
