@@ -245,7 +245,7 @@ Install with Composer:
 
 }
 ```
-Include `Codeception\Specifiy` trait into your test.
+Include `Codeception\Specify` trait into your test.
 
 
 License: MIT
