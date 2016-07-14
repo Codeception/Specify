@@ -11,7 +11,7 @@ Inspired by MiniTest of Ruby now you combine BDD and classical TDD style in one 
 Additionaly, we recommend to combine this with [**Codeception/Verify**](https://github.com/Codeception/Verify) library, to get BDD style assertions.
 
 ``` php
-<?
+<?php
 class UserTest extends PHPUnit_Framework_TestCase {
 
 	use Codeception\Specify;
@@ -27,18 +27,18 @@ class UserTest extends PHPUnit_Framework_TestCase {
 
 		$this->specify("username is required", function() {
 			$this->user->username = null;
-			verify($user->validate(['username'])->false());	
+			verify($this->user->validate(['username'])->false());	
 		});
 
 		$this->specify("username is too long", function() {
 			$this->user->username = 'toolooooongnaaaaaaameeee',
-			verify($user->validate(['username'])->false());			
+			verify($this->user->validate(['username'])->false());			
 		});
 
 		// alternative, TDD assertions can be used too.
 		$this->specify("username is ok", function() {
 			$this->user->username = 'davert',
-			$this->assertTrue($user->validate(['username']));			
+			$this->assertTrue($this->user->validate(['username']));			
 		});				
 	}
 }
