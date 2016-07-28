@@ -185,7 +185,7 @@ In both cases, you can optionally test the exception message
 <?php
 
 $this->specify('some exception with a message', function() {
-	throw new NotFoundException("my error message');
+	throw new NotFoundException('my error message');
 }, ['throws' => ['NotFoundException', 'my error message']]);
 ?>
 ```
