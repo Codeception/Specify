@@ -28,22 +28,28 @@ trait Specify {
     }
 
 	function specify($specification, \Closure $callable = null, $params = [])
-	{
+    {
         if (!$callable) return;
         $this->specifyInit();
 
         $test = $callable->bindTo($this);
-        $name = $this->getName();
-        $this->setName($this->getName().' | '.$specification);
+        $oldName = $this->getName();
+        $newName = $oldName . ' | ' . $specification;
+
+        $this->setName($newName);
 
         $properties = get_object_vars($this);
 
         // prepare for execution
         $throws = $this->getSpecifyExpectedException($params);
         $examples = $this->getSpecifyExamples($params);
+        $showExamplesIndex = $examples !== [[]];
 
         foreach ($examples as $idx => $example) {
-            $this->setName($name.' | '.$specification .' | examples index '. $idx);
+            if ($showExamplesIndex) {
+                $this->setName($newName . ' | examples index ' . $idx);
+            }
+
             // copy current object properties
             $this->specifyCloneProperties($properties);
 
@@ -67,8 +73,8 @@ trait Specify {
         }
 
         // restore test name
-        $this->setName($name);
-	}
+        $this->setName($oldName);
+    }
 
     /**
      * @param $params
