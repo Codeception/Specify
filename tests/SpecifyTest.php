@@ -233,6 +233,52 @@ class SpecifyTest extends \PHPUnit_Framework_TestCase {
         $this->assertEquals(['hello', 'world'], $this->testOne->prop);
     }
 
+    public function testExamplesIndexInName()
+    {
+        $name = $this->getName();
+
+        $this->specify('it appends index of an example to a test case name', function ($idx, $example) use ($name) {
+            $name .= ' | it appends index of an example to a test case name';
+            $this->assertEquals($name . ' | examples index ' . $idx, $this->getName());
+
+            $this->specify('nested specification without examples', function () use ($idx, $name) {
+                $name .= ' | examples index ' . $idx;
+                $name .= ' | nested specification without examples';
+                $this->assertEquals($name, $this->getName());
+            });
+
+            $this->specify('nested specification with examples', function () use ($idx, $name) {
+                $name .= ' | examples index ' . $idx;
+                $name .= ' | nested specification with examples';
+                $name .= ' | examples index 0';
+                $this->assertEquals($name, $this->getName());
+            }, ['examples' => [
+                [$example]
+            ]]);
+        }, ['examples' => [
+            [0, ''],
+            [1, '0'],
+            [2, null],
+            [3, 'bye'],
+            [4, 'world'],
+        ]]);
+
+        $this->specify('it does not append index to a test case name if there are no examples', function () use ($name) {
+            $name .= ' | it does not append index to a test case name if there are no examples';
+            $this->assertEquals($name, $this->getName());
+
+            $this->specify('nested specification without examples', function () use ($name) {
+                $this->assertEquals($name . ' | nested specification without examples', $this->getName());
+            });
+
+            $this->specify('nested specification with examples', function () use ($name) {
+                $this->assertEquals($name . ' | nested specification with examples | examples index 0', $this->getName());
+            }, ['examples' => [
+                [null]
+            ]]);
+        });
+    }
+
 //    public function testFail()
 //    {
 //        $this->specify('this will fail', function(){
