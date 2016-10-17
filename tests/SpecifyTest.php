@@ -279,24 +279,6 @@ class SpecifyTest extends \PHPUnit_Framework_TestCase {
         });
     }
 
-    public function testMockObjectsIsolation()
-    {
-        $mock = $this->getMock(get_class($this), ['testMockObjectsIsolation']);
-        $mock->expects($this->once())->method('testMockObjectsIsolation');
-
-        $this->specify('this should fail', function () {
-            $mock = $this->getMock(get_class($this), ['testMockObjectsIsolation']);
-            $mock->expects($this->exactly(100500))->method('testMockObjectsIsolation');
-        }, ['throws' => 'PHPUnit_Framework_ExpectationFailedException']);
-
-        $this->specify('this should not fail', function () {
-            $mock = $this->getMock(get_class($this), ['testMockObjectsIsolation']);
-            $mock->expects($this->never())->method('testMockObjectsIsolation');
-        });
-
-        $mock->testMockObjectsIsolation();
-    }
-
 //    public function testFail()
 //    {
 //        $this->specify('this will fail', function(){
