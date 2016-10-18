@@ -3,8 +3,10 @@ namespace Codeception;
 
 use Codeception\Specify\Config;
 use Codeception\Specify\ConfigBuilder;
+use Codeception\Specify\ObjectProperty;
 
-trait Specify {
+trait Specify
+{
 
     private $beforeSpecify = array();
     private $afterSpecify = array();
@@ -27,7 +29,7 @@ trait Specify {
         if (!$this->specifyConfig) $this->specifyConfig = Config::create();
     }
 
-	function specify($specification, \Closure $callable = null, $params = [])
+    function specify($specification, \Closure $callable = null, $params = [])
     {
         if (!$callable) return;
         $this->specifyInit();
@@ -38,7 +40,7 @@ trait Specify {
 
         $this->setName($newName);
 
-        $properties = get_object_vars($this);
+        $properties = $this->getSpecifyObjectProperties();
 
         // prepare for execution
         $throws = $this->getSpecifyExpectedException($params);
@@ -58,13 +60,12 @@ trait Specify {
                     if ($closure instanceof \Closure) $closure->__invoke();
                 }
             }
+
             $this->specifyExecute($test, $throws, $example);
 
             // restore object properties
-            foreach ($properties as $property => $val) {
-                if ($this->specifyConfig->propertyIgnored($property)) continue;
-                $this->$property = $val;
-            }
+            $this->specifyRestoreProperties($properties);
+
             if (!empty($this->afterSpecify) && is_array($this->afterSpecify)) {
                 foreach ($this->afterSpecify as $closure) {
                     if ($closure instanceof \Closure) $closure->__invoke();
@@ -120,8 +121,10 @@ trait Specify {
         }
 
         $result = $this->getTestResultObject();
+
         try {
             call_user_func_array($test, $examples);
+            $this->specifyCheckMockObjects();
         } catch (\PHPUnit_Framework_AssertionFailedError $e) {
             if ($throws !== get_class($e)){
                 $result->addFailure(clone($this), $e, $result->time());
@@ -179,29 +182,86 @@ trait Specify {
     }
 
     /**
-     * @param $properties
-     * @return array
+     * @param ObjectProperty[] $properties
      */
     private function specifyCloneProperties($properties)
     {
-        foreach ($properties as $property => $val) {
-            if ($this->specifyConfig->propertyIgnored($property)) {
-                continue;
-            }
-            if ($this->specifyConfig->classIgnored($val)) {
+        foreach ($properties as $property) {
+            $propertyName = $property->getName();
+            $propertyValue = $property->getValue();
+
+            if ($this->specifyConfig->classIgnored($propertyValue)) {
                 continue;
             }
 
-            if ($this->specifyConfig->propertyIsShallowCloned($property)) {
-                if (is_object($val)) {
-                    $this->$property = clone $val;
+            if ($this->specifyConfig->propertyIsShallowCloned($propertyName)) {
+                if (is_object($propertyValue)) {
+                    $property->setValue(clone $propertyValue);
                 } else {
-                    $this->$property = $val;
+                    $property->setValue($propertyValue);
                 }
             }
-            if ($this->specifyConfig->propertyIsDeeplyCloned($property)) {
-                $this->$property = $this->copier->copy($val);
+
+            if ($this->specifyConfig->propertyIsDeeplyCloned($propertyName)) {
+                $property->setValue($this->copier->copy($propertyValue));
             }
+        }
+    }
+
+    /**
+     * @param ObjectProperty[] $properties
+     */
+    private function specifyRestoreProperties($properties)
+    {
+        foreach ($properties as $property) {
+            $property->restoreValue();
+        }
+    }
+
+    /**
+     * @return ObjectProperty[]
+     */
+    private function getSpecifyObjectProperties()
+    {
+        $properties = [];
+
+        foreach (get_object_vars($this) as $property => $value) {
+            if ($this->specifyConfig->propertyIgnored($property)) {
+                continue;
+            }
+
+            $properties[] = new ObjectProperty($this, $property, $value);
+        }
+
+        // isolate mockObjects property from PHPUnit_Framework_TestCase
+        if (($phpUnitReflection = $this->specifyGetPhpUnitReflection()) !== null) {
+            $properties[] = $mockObjects = new ObjectProperty(
+                $this, $phpUnitReflection->getProperty('mockObjects')
+            );
+
+            // remove all mock objects inherited from parent scope(s)
+            $mockObjects->setValue([]);
+        }
+
+        return $properties;
+    }
+
+    private function specifyCheckMockObjects()
+    {
+        if (($phpUnitReflection = $this->specifyGetPhpUnitReflection()) !== null) {
+            $verifyMockObjects = $phpUnitReflection->getMethod('verifyMockObjects');
+            $verifyMockObjects->setAccessible(true);
+            $verifyMockObjects->invoke($this);
+        }
+    }
+
+    /**
+     * @return \ReflectionClass|null
+     */
+    private function specifyGetPhpUnitReflection()
+    {
+        if ($this instanceof \PHPUnit_Framework_TestCase) {
+            return new \ReflectionClass('\PHPUnit_Framework_TestCase');
         }
     }
 }
