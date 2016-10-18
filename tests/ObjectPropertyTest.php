@@ -1,6 +1,6 @@
 <?php
 
-class ObjectPropertyTest extends \SpecifyUnitTester
+class ObjectPropertyTest extends \SpecifyUnitTest
 {
     private $private = 'private';
 

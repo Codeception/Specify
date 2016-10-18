@@ -1,6 +1,6 @@
 <?php
 
-class ConfigTest extends \SpecifyUnitTester
+class ConfigTest extends \SpecifyUnitTest
 {
     /**
      * @var \Codeception\Specify\Config

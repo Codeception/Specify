@@ -1,6 +1,6 @@
 <?php
 
-class SpecifyTest extends \SpecifyUnitTester
+class SpecifyTest extends \SpecifyUnitTest
 {
     protected $user;
     protected $a;
