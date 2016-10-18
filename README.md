@@ -77,7 +77,7 @@ $this->assertTrue(true);
 ?>
 ```
 
-If a test fails you will specification text in the result.
+If a test fails you will see specification text in the result.
 
 ## Isolation
 
