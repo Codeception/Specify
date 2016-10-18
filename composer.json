@@ -2,6 +2,7 @@
     "name": "codeception/specify",
     "description": "BDD code blocks for PHPUnit and Codeception",
     "minimum-stability": "stable",
+    "license": "MIT",
     "authors": [
         {
             "name": "Michael Bodnarchuk",
