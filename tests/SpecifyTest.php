@@ -4,6 +4,7 @@ class SpecifyTest extends \SpecifyUnitTest
 {
     protected $user;
     protected $a;
+    protected $private = false;
 
     public function testSpecification()
     {
@@ -227,7 +228,15 @@ class SpecifyTest extends \SpecifyUnitTest
             ['bye'],
             ['world'],
         ]]);
+
         $this->assertEquals(['hello', 'world'], $this->testOne->prop);
+        $this->assertFalse($this->private);
+
+        $this->specify('property $private should be restored properly', function() {
+            $this->private = 'i\'m protected';
+        });
+
+        $this->assertFalse($this->private);
     }
 
     public function testExamplesIndexInName()

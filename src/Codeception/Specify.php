@@ -224,13 +224,14 @@ trait Specify
     private function getSpecifyObjectProperties()
     {
         $properties = [];
+        $myReflection = new \ReflectionObject($this);
 
-        foreach (get_object_vars($this) as $property => $value) {
-            if ($this->specifyConfig->propertyIgnored($property)) {
+        foreach ($myReflection->getProperties() as $property) {
+            if ($this->specifyConfig->propertyIgnored($property->getName())) {
                 continue;
             }
 
-            $properties[] = new ObjectProperty($this, $property, $value);
+            $properties[] = new ObjectProperty($this, $property);
         }
 
         // isolate mockObjects property from PHPUnit_Framework_TestCase
