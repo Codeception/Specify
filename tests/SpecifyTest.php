@@ -1,10 +1,7 @@
 <?php
-require_once __DIR__.'/../vendor/autoload.php';
 
-class SpecifyTest extends \PHPUnit_Framework_TestCase {
-
-    use Codeception\Specify;
-
+class SpecifyTest extends \SpecifyUnitTester
+{
     protected $user;
     protected $a;
 

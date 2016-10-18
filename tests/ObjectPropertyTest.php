@@ -1,7 +1,6 @@
 <?php
-require_once __DIR__.'/../vendor/autoload.php';
 
-class ObjectPropertyTest extends \PHPUnit_Framework_TestCase
+class ObjectPropertyTest extends \SpecifyUnitTester
 {
     private $private = 'private';
 
