@@ -223,10 +223,16 @@ trait Specify
      */
     private function getSpecifyObjectProperties()
     {
-        $properties = [];
-        $myReflection = new \ReflectionObject($this);
+        $objectReflection = new \ReflectionObject($this);
+        $propertiesToClone = $objectReflection->getProperties();
 
-        foreach ($myReflection->getProperties() as $property) {
+        if (($classProperties = $this->specifyGetClassPrivateProperties()) !== []) {
+            $propertiesToClone = array_merge($propertiesToClone, $classProperties);
+        }
+
+        $properties = [];
+
+        foreach ($propertiesToClone as $property) {
             if ($this->specifyConfig->propertyIgnored($property->getName())) {
                 continue;
             }
@@ -254,6 +260,20 @@ trait Specify
             $verifyMockObjects->setAccessible(true);
             $verifyMockObjects->invoke($this);
         }
+    }
+
+    private function specifyGetClassPrivateProperties()
+    {
+        static $properties = [];
+
+        if (!isset($properties[__CLASS__])) {
+            $reflection = new \ReflectionClass(__CLASS__);
+
+            $properties[__CLASS__] = (get_class($this) !== __CLASS__)
+                ? $reflection->getProperties(\ReflectionProperty::IS_PRIVATE) : [];
+        }
+
+        return $properties[__CLASS__];
     }
 
     /**
