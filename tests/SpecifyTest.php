@@ -1,12 +1,11 @@
 <?php
-require_once __DIR__.'/../vendor/autoload.php';
 
-class SpecifyTest extends \PHPUnit_Framework_TestCase {
-
-    use Codeception\Specify;
-
+class SpecifyTest extends \SpecifyUnitTest
+{
     protected $user;
     protected $a;
+
+    private $private = false;
 
     public function testSpecification()
     {
@@ -230,7 +229,19 @@ class SpecifyTest extends \PHPUnit_Framework_TestCase {
             ['bye'],
             ['world'],
         ]]);
+
         $this->assertEquals(['hello', 'world'], $this->testOne->prop);
+        $this->assertFalse($this->private);
+        $this->assertTrue($this->getPrivateProperty());
+
+        $this->specify('property $private should be restored properly', function() {
+            $this->private = 'i\'m protected';
+            $this->setPrivateProperty('i\'m private');
+            $this->assertEquals('i\'m private', $this->getPrivateProperty());
+        });
+
+        $this->assertFalse($this->private);
+        $this->assertTrue($this->getPrivateProperty());
     }
 
     public function testExamplesIndexInName()
@@ -277,6 +288,24 @@ class SpecifyTest extends \PHPUnit_Framework_TestCase {
                 [null]
             ]]);
         });
+    }
+
+    public function testMockObjectsIsolation()
+    {
+        $mock = $this->getMock(get_class($this), ['testMockObjectsIsolation']);
+        $mock->expects($this->once())->method('testMockObjectsIsolation');
+
+        $this->specify('this should fail', function () {
+            $mock = $this->getMock(get_class($this), ['testMockObjectsIsolation']);
+            $mock->expects($this->exactly(100500))->method('testMockObjectsIsolation');
+        }, ['throws' => 'PHPUnit_Framework_ExpectationFailedException']);
+
+        $this->specify('this should not fail', function () {
+            $mock = $this->getMock(get_class($this), ['testMockObjectsIsolation']);
+            $mock->expects($this->never())->method('testMockObjectsIsolation');
+        });
+
+        $mock->testMockObjectsIsolation();
     }
 
 //    public function testFail()
