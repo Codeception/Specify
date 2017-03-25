@@ -1,12 +1,11 @@
 <?php
-require_once __DIR__.'/../vendor/autoload.php';
 
-class SpecifyTest extends \PHPUnit_Framework_TestCase {
-
-    use Codeception\Specify;
-
+class SpecifyTest extends \SpecifyUnitTest
+{
     protected $user;
     protected $a;
+
+    private $private = false;
 
     public function testSpecification()
     {
@@ -230,7 +229,83 @@ class SpecifyTest extends \PHPUnit_Framework_TestCase {
             ['bye'],
             ['world'],
         ]]);
+
         $this->assertEquals(['hello', 'world'], $this->testOne->prop);
+        $this->assertFalse($this->private);
+        $this->assertTrue($this->getPrivateProperty());
+
+        $this->specify('property $private should be restored properly', function() {
+            $this->private = 'i\'m protected';
+            $this->setPrivateProperty('i\'m private');
+            $this->assertEquals('i\'m private', $this->getPrivateProperty());
+        });
+
+        $this->assertFalse($this->private);
+        $this->assertTrue($this->getPrivateProperty());
+    }
+
+    public function testExamplesIndexInName()
+    {
+        $name = $this->getName();
+
+        $this->specify('it appends index of an example to a test case name', function ($idx, $example) use ($name) {
+            $name .= ' | it appends index of an example to a test case name';
+            $this->assertEquals($name . ' | examples index ' . $idx, $this->getName());
+
+            $this->specify('nested specification without examples', function () use ($idx, $name) {
+                $name .= ' | examples index ' . $idx;
+                $name .= ' | nested specification without examples';
+                $this->assertEquals($name, $this->getName());
+            });
+
+            $this->specify('nested specification with examples', function () use ($idx, $name) {
+                $name .= ' | examples index ' . $idx;
+                $name .= ' | nested specification with examples';
+                $name .= ' | examples index 0';
+                $this->assertEquals($name, $this->getName());
+            }, ['examples' => [
+                [$example]
+            ]]);
+        }, ['examples' => [
+            [0, ''],
+            [1, '0'],
+            [2, null],
+            [3, 'bye'],
+            [4, 'world'],
+        ]]);
+
+        $this->specify('it does not append index to a test case name if there are no examples', function () use ($name) {
+            $name .= ' | it does not append index to a test case name if there are no examples';
+            $this->assertEquals($name, $this->getName());
+
+            $this->specify('nested specification without examples', function () use ($name) {
+                $this->assertEquals($name . ' | nested specification without examples', $this->getName());
+            });
+
+            $this->specify('nested specification with examples', function () use ($name) {
+                $this->assertEquals($name . ' | nested specification with examples | examples index 0', $this->getName());
+            }, ['examples' => [
+                [null]
+            ]]);
+        });
+    }
+
+    public function testMockObjectsIsolation()
+    {
+        $mock = $this->getMock(get_class($this), ['testMockObjectsIsolation']);
+        $mock->expects($this->once())->method('testMockObjectsIsolation');
+
+        $this->specify('this should fail', function () {
+            $mock = $this->getMock(get_class($this), ['testMockObjectsIsolation']);
+            $mock->expects($this->exactly(100500))->method('testMockObjectsIsolation');
+        }, ['throws' => 'PHPUnit_Framework_ExpectationFailedException']);
+
+        $this->specify('this should not fail', function () {
+            $mock = $this->getMock(get_class($this), ['testMockObjectsIsolation']);
+            $mock->expects($this->never())->method('testMockObjectsIsolation');
+        });
+
+        $mock->testMockObjectsIsolation();
     }
 
 //    public function testFail()

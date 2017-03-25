@@ -3,7 +3,7 @@ Specify
 
 BDD style code blocks for PHPUnit / Codeception
 
-Specify allows you to write your tests in more readable BDD style, the same way you might have experienced with [Jasmine](http://pivotal.github.io/jasmine/).
+Specify allows you to write your tests in more readable BDD style, the same way you might have experienced with [Jasmine](https://jasmine.github.io/).
 Inspired by MiniTest of Ruby now you combine BDD and classical TDD style in one test.
 
 [![Build Status](https://travis-ci.org/Codeception/Specify.png?branch=master)](https://travis-ci.org/Codeception/Specify) [![Latest Stable Version](https://poser.pugx.org/codeception/specify/v/stable.png)](https://packagist.org/packages/codeception/specify)
@@ -11,7 +11,7 @@ Inspired by MiniTest of Ruby now you combine BDD and classical TDD style in one 
 Additionaly, we recommend to combine this with [**Codeception/Verify**](https://github.com/Codeception/Verify) library, to get BDD style assertions.
 
 ``` php
-<?
+<?php
 class UserTest extends PHPUnit_Framework_TestCase {
 
 	use Codeception\Specify;
@@ -27,18 +27,18 @@ class UserTest extends PHPUnit_Framework_TestCase {
 
 		$this->specify("username is required", function() {
 			$this->user->username = null;
-			verify($user->validate(['username'])->false());	
+			verify($this->user->validate(['username'])->false());	
 		});
 
 		$this->specify("username is too long", function() {
 			$this->user->username = 'toolooooongnaaaaaaameeee',
-			verify($user->validate(['username'])->false());			
+			verify($this->user->validate(['username'])->false());			
 		});
 
 		// alternative, TDD assertions can be used too.
 		$this->specify("username is ok", function() {
 			$this->user->username = 'davert',
-			$this->assertTrue($user->validate(['username']));			
+			$this->assertTrue($this->user->validate(['username']));			
 		});				
 	}
 }
@@ -77,7 +77,7 @@ $this->assertTrue(true);
 ?>
 ```
 
-If a test fails you will specification text in the result.
+If a test fails you will see specification text in the result.
 
 ## Isolation
 
@@ -185,7 +185,7 @@ In both cases, you can optionally test the exception message
 <?php
 
 $this->specify('some exception with a message', function() {
-	throw new NotFoundException("my error message');
+	throw new NotFoundException('my error message');
 }, ['throws' => ['NotFoundException', 'my error message']]);
 ?>
 ```
@@ -245,7 +245,7 @@ Install with Composer:
 
 }
 ```
-Include `Codeception\Specifiy` trait into your test.
+Include `Codeception\Specify` trait into your test.
 
 
 License: MIT
