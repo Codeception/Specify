@@ -8,6 +8,47 @@ BDD style code blocks for PHPUnit / Codeception
 Specify allows you to write your tests in more readable BDD style, the same way you might have experienced with [Jasmine](https://jasmine.github.io/).
 Inspired by MiniTest of Ruby now you combine BDD and classical TDD style in one test.
 
+### Basic Example
+
+Traditionally Specify used `$this->specify` function for all descriptions. 
+That works too!
+
+```php
+<?php
+class UserTest extends PHPUnit\Framework\TestCase {
+
+	use Codeception\Specify;
+	
+	/** @specify */
+	protected $user;
+
+	public function setUp()
+	{		
+		$this->user = new User;
+	}
+
+	public function testValidation()
+	{
+		$this->assertInstanceOf('Model', $this->user);
+
+		$this->specify("username is required", function() {
+			$this->user->username = null;
+			$this->assertFalse($this->user->validate(['username']));	
+		});
+
+		$this->specify("username is too long", function() {
+			$this->user->username = 'toolooooongnaaaaaaameeee',
+			$this->assertFalse($this->user->validate(['username']));			
+		});
+
+		$this->specify("username is ok", function() {
+			$this->user->username = 'davert',
+			$this->assertTrue($this->user->validate(['username']));			
+		});				
+	}
+}
+```
+
 ### BDD Example
 
 Specify supports `describe-it` BDD syntax inside PHPUnit
@@ -53,50 +94,10 @@ class UserTest extends PHPUnit\Framework\TestCase {
 }
 ```
 
-### Basic Example
-
-Traditionally Specify used `$this->specify` function for all descriptions. 
-That works too!
-
-```php
-<?php
-class UserTest extends PHPUnit\Framework\TestCase {
-
-	use Codeception\Specify;
-	
-	/** @specify */
-	protected $user;
-
-	public function setUp()
-	{		
-		$this->user = new User;
-	}
-
-	public function testValidation()
-	{
-		$this->assertInstanceOf('Model', $this->user);
-
-		$this->specify("username is required", function() {
-			$this->user->username = null;
-			$this->assertFalse($this->user->validate(['username']));	
-		});
-
-		$this->specify("username is too long", function() {
-			$this->user->username = 'toolooooongnaaaaaaameeee',
-			$this->assertFalse($this->user->validate(['username']));			
-		});
-
-		$this->specify("username is ok", function() {
-			$this->user->username = 'davert',
-			$this->assertTrue($this->user->validate(['username']));			
-		});				
-	}
-}
-```
 
 ### Specify + Verify Example
 
-Use [Codeception/Verify](https://github.com/Codeception/Verify for simpler assertions:
+Use [Codeception/Verify](https://github.com/Codeception/Verify) for simpler assertions:
 
 ```php
 <?php
