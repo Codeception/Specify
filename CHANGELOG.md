@@ -3,14 +3,17 @@
 ## 1.0
 
 * PHPUnit 6 support
-* Removed configuration section
-* Only properties marked with `@specify` annotation will be cloned in specify blocks.
-* Added `Codeception\Specify\ResultPrinter` to fix printing of nested examples.
+* **Removed configuration** section
+* **Only properties marked with `@specify` annotation are cloned** in specify blocks.
+* **Removed throws** parameter in specify blocks 
+* Added `Codeception\Specify\ResultPrinter` to fix printing progress of specify blcoks.
 
 ### Upgrade Plan
 
 1. Update to PHP7+ PHPUnit 6+
-2. Add to `phpunit.xml` 
+2. Add to `phpunit.xml`: `printerClass="Codeception\Specify\ResultPrinter"`
+3. If relied on property cloning, add `@specify` annotation for all properties which needs to be cloned for specify blocks
+4. If you used `throws` parameter, consider using [AssertThrows](https://github.com/Codeception/AssertThrows) package.
 
 #### 0.4.3
 

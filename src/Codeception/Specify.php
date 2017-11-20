@@ -38,7 +38,7 @@ trait Specify
 
     public function it($specification, \Closure $callable = null, $params = [])
     {
-        $this->specify("should " . $specification, $callable, $params);
+        $this->specify($specification, $callable, $params);
     }
 
     public function describe($specification, \Closure $callable = null)

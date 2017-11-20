@@ -3,18 +3,69 @@ Specify
 
 BDD style code blocks for PHPUnit / Codeception
 
+[![Latest Stable Version](https://poser.pugx.org/codeception/specify/v/stable)](https://packagist.org/packages/codeception/specify)[![Total Downloads](https://poser.pugx.org/codeception/specify/downloads)](https://packagist.org/packages/codeception/specify)[![Latest Unstable Version](https://poser.pugx.org/codeception/specify/v/unstable)](https://packagist.org/packages/codeception/specify)[![License](https://poser.pugx.org/codeception/specify/license)](https://packagist.org/packages/codeception/specify)
+
 Specify allows you to write your tests in more readable BDD style, the same way you might have experienced with [Jasmine](https://jasmine.github.io/).
 Inspired by MiniTest of Ruby now you combine BDD and classical TDD style in one test.
 
-[![Build Status](https://travis-ci.org/Codeception/Specify.png?branch=master)](https://travis-ci.org/Codeception/Specify) [![Latest Stable Version](https://poser.pugx.org/codeception/specify/v/stable.png)](https://packagist.org/packages/codeception/specify)
+### BDD Example
 
-Additionaly, we recommend to combine this with [**Codeception/Verify**](https://github.com/Codeception/Verify) library, to get BDD style assertions.
+Specify supports `describe-it` BDD syntax inside PHPUnit
 
-``` php
+```php
 <?php
-class UserTest extends PHPUnit_Framework_TestCase {
+class UserTest extends PHPUnit\Framework\TestCase {
 
 	use Codeception\Specify;
+	
+	/** @specify */
+	protected $user;
+
+	public function setUp()
+	{		
+		$this->user = new User;
+	}
+
+	public function testValidation()
+	{
+        $this->describe("user", function() {
+            $this->it("should have a name", function() {
+                $this->user->username = null;
+                $this->assertFalse($this->user->validate(['username']));	
+            });
+    
+            $this->it("should not have long name", function() {
+                $this->user->username = 'toolooooongnaaaaaaameeee';
+                $this->assertFalse($this->user->validate(['username']));			
+            });
+            
+            // use `$this->>should` as shortcut
+            $this->should("be ok with valid name", function() {
+                $this->user->username = 'davert';
+                $this->assertTrue($this->user->validate(['username']));			
+            });
+            
+            // empty codeblocks are marked as Incomplete tests
+            $this->it("should be ok with valid name");				
+        });
+
+	}
+}
+```
+
+### Basic Example
+
+Traditionally Specify used `$this->specify` function for all descriptions. 
+That works too!
+
+```php
+<?php
+class UserTest extends PHPUnit\Framework\TestCase {
+
+	use Codeception\Specify;
+	
+	/** @specify */
+	protected $user;
 
 	public function setUp()
 	{		
@@ -27,32 +78,31 @@ class UserTest extends PHPUnit_Framework_TestCase {
 
 		$this->specify("username is required", function() {
 			$this->user->username = null;
-			verify($this->user->validate(['username'])->false());	
+			$this->assertFalse($this->user->validate(['username']));	
 		});
 
 		$this->specify("username is too long", function() {
 			$this->user->username = 'toolooooongnaaaaaaameeee',
-			verify($this->user->validate(['username'])->false());			
+			$this->assertFalse($this->user->validate(['username']));			
 		});
 
-		// alternative, TDD assertions can be used too.
 		$this->specify("username is ok", function() {
 			$this->user->username = 'davert',
 			$this->assertTrue($this->user->validate(['username']));			
 		});				
 	}
 }
-?>
 ```
+
 
 ## Purpose
 
-This tiny library makes your tests a bit readable, by orginizing test in well described code blocks.
+This tiny library makes your tests a bit readable, by organizing test in well described code blocks.
 Each code block is isolated. 
 
-This means call to `$this->specify` does not affect any instance variable of a test class.
+This means call to `$this->specify` does not change values of configured properties of a test class.
 
-``` php
+```php
 <?php
 $this->user->name = 'davert';
 $this->specify("i can change my name", function() {
@@ -66,7 +116,7 @@ $this->assertEquals('davert', $this->user->name);
 
 Failure in `specify` block won't get your test stopped.
 
-``` php
+```php
 <?php
 $this->specify("failing but test goes on", function() {
 	$this->fail('bye');
@@ -82,82 +132,49 @@ If a test fails you will see specification text in the result.
 ## Isolation
 
 Isolation is achieved by **cloning object properties** for each specify block.
-By default objects are cloned using deep cloning method.
-This behavior can be customized in order to speed up test execution by preventing some objects from cloning or switching to shallow cloning using `clone` operator.
-Some properties can be ignored from cloning using either global or local config settings.
+Only properties makred with `@specify` annotation are cloned. 
 
-### Global Configuration
+```php
+/** @specify */
+protected $user; // cloning
 
-Cloning configuration can be set globally
+/** 
+ * @specify 
+ **/
+protected $user; // cloning
+
+protected $repository; // not cloning
+```
+
+Objects are cloned using deep cloning method. 
+**If object cloning affects performance, consider turning the clonning off**.
+
+**Mocks are isolated** by default. 
+
+A mock defined inside a specify block won't be executed inside an outer test,
+and mock from outer test won't be triggered inside codeblock.
 
 ```php
 <?php
-// globally disabling cloning of properties
-Codeception\Specify\Config::setIgnoredProperties(['user', 'repository']);
-?>
+$config = $this->createMock(Config::class);
+$config->expects($this->once())->method('init');
+
+$config->init();
+// success: $config->init() was executed
+
+$this->specify('this should not fail', function () {
+    $config = $this->createMock(Config::class);
+    $config->expects($this->never())->method('init')->willReturn(null);
+    // success: $config->init() is never executed 
+});
+
 ```
-
-See complete [reference](https://github.com/Codeception/Specify/blob/master/docs/GlobalConfig.md).
-
-### Local Configuration
-
-Configuring can be done locally per test case
-
-```php
-<?php
-class UserTest extends \PHPUnit_Framework_TestCase
-{
-    use Codeception\Specify;
-
-    function testUser()
-    {
-        // do not deep clone user property
-        $this->specifyConfig()
-            ->shallowClone('user');
-    }
-}
-```
-
-Only specific properties can be preserved in specify blocks:
-
-```php
-<?php
-class UserTest extends \PHPUnit_Framework_TestCase
-{
-    use Codeception\Specify;
-    protected $user;
-    protected $post;
-
-    function testUser()
-    {
-        $this->user = 'davert';
-        $this->post = 'hello world';
-
-        $this->specifyConfig()
-            ->cloneOnly('user');
-
-        $this->specify('post is not cloned', function() {
-            $this->user = 'john';
-            $this->post = 'bye world';
-        });
-        $this->assertEquals('davert', $this->user); // user is restored
-        $this->assertEquals('bye world', $this->post); // post was not stored
-    }
-}
-```
-
-
-[Reference](https://github.com/Codeception/Specify/blob/master/docs/LocalConfig.md)
-
-
-## Exceptions
-
 
 ## Examples
 
-DataProviders alternative. Quite useful for basic data providers.
+DataProviders alternative
 
-``` php
+```php
 <?php
 $this->specify("should calculate square numbers", function($number, $square) {
 	$this->assertEquals($square, $number*$number);
@@ -165,24 +182,42 @@ $this->specify("should calculate square numbers", function($number, $square) {
 		[2,4],
 		[3,9]
 ]]);
-?>
 ```
 
 You can also use DataProvider functions in `examples` param.
 
-``` php
+```php
 <?php
 $this->specify("should calculate square numbers", function($number, $square) {
 	$this->assertEquals($square, $number*$number);
 }, ['examples' => $this->provider()]);
-?>
+```
+
+Can also be used with real data providers:
+
+```php
+<?php
+/**
+ * @dataProvider someData
+ */
+public function testExamplesAndDataProvider($param)
+{
+    $this->specify('should assert data provider', function ($example) use ($param) {
+        $this->assertGreaterThanOrEqual(5, $param + $example);
+    }, ['examples' => [[4], [7], [5]]]);
+}
+
+public function someData()
+{
+    return [[1], [2]];
+}
 ```
 
 ## Before/After
 
 There are also before and after callbacks, which act as setUp/tearDown but only for specify.
 
-``` php
+```php
 <?php
 $this->beforeSpecify(function() {
 	// prepare something;	
@@ -194,9 +229,19 @@ $this->cleanSpecify(); // removes before/after callbacks
 ?>
 ```
 
+## API
+
+Available methods:
+
+* `$this->specify(name, callable fn = null, params = [])` - starts a specify code block. If `fn` is null, marks test as incomplete. 
+* `$this->describe(name, callable fn = null)` - starts a describe code block. Same as `specify` but expects to receive more nested into `fn`.
+* `$this->it(name, callable fn = null)` - starts a code block. Alias to `specify`.
+* `$this->should(name, callable fn = null)` - starts a code block. Same as `specify` but prepends word "should" into description.
+
+
 ## Installation
 
-*Requires PHP >= 5.4.*
+*Requires PHP >= 7.*
 
 Install with Composer:
 
@@ -208,7 +253,12 @@ Install with Composer:
 
 }
 ```
-Include `Codeception\Specify` trait into your test.
+Include `Codeception\Specify` trait into `PHPUnit\Framework\TestCase`.
 
+## Recommended
+
+* Use [Codeception/AssertThrows](https://github.com/Codeception/AssertThrows) for exception assertions
+* Use [Codeceptoin/DomainAssert](https://github.com/Codeception/DomainAssert) for verbose domain logic assertions
+* Сombine this with [Codeception/Verify](https://github.com/Codeception/Verify) library, to get BDD style assertions.
 
 License: MIT

@@ -271,21 +271,64 @@ class SpecifyTest extends \SpecifyUnitTest
             });
 
         });
+    }
 
+    public function testBDDStyle()
+    {
+        $name = $this->getName();
+
+        $this->describe('user', function() use ($name) {
+            $name .= ' | user';
+            $this->it('should be ok', function () use ($name) {
+                $name .= ' should be ok';
+                $this->assertEquals($name, $this->getCurrentSpecifyTest()->getName(false));
+            });
+            $this->should('be ok', function () use ($name) {
+                $name .= ' should be ok';
+                $this->assertEquals($name, $this->getCurrentSpecifyTest()->getName(false));
+            });
+        });
     }
 
     public function testMockObjectsIsolation()
     {
         $mock = $this->createMock(get_class($this));
         $mock->expects($this->once())->method('testMockObjectsIsolation');
+        $mock->testMockObjectsIsolation();
 
         $this->specify('this should not fail', function () {
             $mock = $this->createMock(get_class($this));
             $mock->expects($this->never())->method('testMockObjectsIsolation')->willReturn(null);
         });
 
-        $mock->testMockObjectsIsolation();
     }
+
+    /**
+     * @dataProvider someData
+     */
+    public function testSpecifyAndDataProvider($param)
+    {
+        $this->specify('should assert data provider', function () use ($param) {
+            $this->assertGreaterThan(0, $param);
+        });
+    }
+
+    /**
+     * @dataProvider someData
+     */
+    public function testExamplesAndDataProvider($param)
+    {
+        $this->specify('should assert data provider', function ($example) use ($param) {
+            $this->assertGreaterThanOrEqual(5, $param + $example);
+        }, ['examples' => [[4], [7], [5]]]);
+    }
+
+    public function someData()
+    {
+        return [[1], [2]];
+    }
+
+
 
 }
 
