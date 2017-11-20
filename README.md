@@ -94,6 +94,27 @@ class UserTest extends PHPUnit\Framework\TestCase {
 }
 ```
 
+### Specify + Verify Example
+
+Use [Codeception/Verify](https://github.com/Codeception/Verify for simpler assertions:
+
+```php
+<?php
+$this->specify("username is required", function() {
+    $this->user->username = null;
+    expect_not($this->user->validate(['username']));	
+});
+
+$this->specify("username is too long", function() {
+    $this->user->username = 'toolooooongnaaaaaaameeee';
+    expect_not($this->user->validate(['username']));			
+});
+
+$this->specify("username is ok", function() {
+    $this->user->username = 'davert';        
+    expect_that($this->user->validate(['username']));			
+});				
+```
 
 ## Purpose
 
@@ -215,7 +236,7 @@ public function someData()
 
 ## Before/After
 
-There are also before and after callbacks, which act as setUp/tearDown but only for specify.
+There are also before and after callbacks, which act as setUp/tearDown but for specify.
 
 ```php
 <?php
@@ -250,10 +271,17 @@ Install with Composer:
 "require-dev": {
     "codeception/specify": "*",
     "codeception/verify": "*"
-
 }
 ```
 Include `Codeception\Specify` trait into `PHPUnit\Framework\TestCase`.
+
+For PHPUnit add `Codeception\Specify\ResultPrinter` printer into `phpunit.xml`
+
+
+```xml
+<phpunit colors="true" printerClass="Codeception\Specify\ResultPrinter">
+</phpunit>
+```
 
 ## Recommended
 

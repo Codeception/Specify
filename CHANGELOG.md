@@ -6,7 +6,7 @@
 * **Removed configuration** section
 * **Only properties marked with `@specify` annotation are cloned** in specify blocks.
 * **Removed throws** parameter in specify blocks 
-* Added `Codeception\Specify\ResultPrinter` to fix printing progress of specify blcoks.
+* Added `Codeception\Specify\ResultPrinter` to fix printing progress of specify blocks.
 
 ### Upgrade Plan
 
