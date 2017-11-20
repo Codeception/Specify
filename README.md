@@ -10,42 +10,27 @@ Inspired by MiniTest of Ruby now you combine BDD and classical TDD style in one 
 
 ### Basic Example
 
-Traditionally Specify used `$this->specify` function for all descriptions. 
-That works too!
+Specify `$this->specify` method to add isolated test blocks for your PHPUnit tests! 
 
 ```php
-<?php
-class UserTest extends PHPUnit\Framework\TestCase {
+public function testValidation()
+{
+    $this->assertInstanceOf('Model', $this->user);
 
-	use Codeception\Specify;
-	
-	/** @specify */
-	protected $user;
+    $this->specify("username is required", function() {
+        $this->user->username = null;
+        $this->assertFalse($this->user->validate(['username']));	
+    });
 
-	public function setUp()
-	{		
-		$this->user = new User;
-	}
+    $this->specify("username is too long", function() {
+        $this->user->username = 'toolooooongnaaaaaaameeee';
+        $this->assertFalse($this->user->validate(['username']));			
+    });
 
-	public function testValidation()
-	{
-		$this->assertInstanceOf('Model', $this->user);
-
-		$this->specify("username is required", function() {
-			$this->user->username = null;
-			$this->assertFalse($this->user->validate(['username']));	
-		});
-
-		$this->specify("username is too long", function() {
-			$this->user->username = 'toolooooongnaaaaaaameeee',
-			$this->assertFalse($this->user->validate(['username']));			
-		});
-
-		$this->specify("username is ok", function() {
-			$this->user->username = 'davert',
-			$this->assertTrue($this->user->validate(['username']));			
-		});				
-	}
+    $this->specify("username is ok", function() {
+        $this->user->username = 'davert';
+        $this->assertTrue($this->user->validate(['username']));			
+    });
 }
 ```
 
@@ -54,43 +39,28 @@ class UserTest extends PHPUnit\Framework\TestCase {
 Specify supports `describe-it` BDD syntax inside PHPUnit
 
 ```php
-<?php
-class UserTest extends PHPUnit\Framework\TestCase {
-
-	use Codeception\Specify;
-	
-	/** @specify */
-	protected $user;
-
-	public function setUp()
-	{		
-		$this->user = new User;
-	}
-
-	public function testValidation()
-	{
-        $this->describe("user", function() {
-            $this->it("should have a name", function() {
-                $this->user->username = null;
-                $this->assertFalse($this->user->validate(['username']));	
-            });
-    
-            $this->it("should not have long name", function() {
-                $this->user->username = 'toolooooongnaaaaaaameeee';
-                $this->assertFalse($this->user->validate(['username']));			
-            });
-            
-            // use `$this->>should` as shortcut
-            $this->should("be ok with valid name", function() {
-                $this->user->username = 'davert';
-                $this->assertTrue($this->user->validate(['username']));			
-            });
-            
-            // empty codeblocks are marked as Incomplete tests
-            $this->it("should be ok with valid name");				
+public function testValidation()
+{
+    $this->describe("user", function() {
+        $this->it("should have a name", function() {
+            $this->user->username = null;
+            $this->assertFalse($this->user->validate(['username']));	
         });
 
-	}
+        $this->it("should not have long name", function() {
+            $this->user->username = 'toolooooongnaaaaaaameeee';
+            $this->assertFalse($this->user->validate(['username']));			
+        });
+        
+        // use `$this->>should` as shortcut
+        $this->should("be ok with valid name", function() {
+            $this->user->username = 'davert';
+            $this->assertTrue($this->user->validate(['username']));			
+        });
+        
+        // empty codeblocks are marked as Incomplete tests
+        $this->it("should be ok with valid name");				
+    });
 }
 ```
 
@@ -100,21 +70,23 @@ class UserTest extends PHPUnit\Framework\TestCase {
 Use [Codeception/Verify](https://github.com/Codeception/Verify) for simpler assertions:
 
 ```php
-<?php
-$this->specify("username is required", function() {
-    $this->user->username = null;
-    expect_not($this->user->validate(['username']));	
-});
-
-$this->specify("username is too long", function() {
-    $this->user->username = 'toolooooongnaaaaaaameeee';
-    expect_not($this->user->validate(['username']));			
-});
-
-$this->specify("username is ok", function() {
-    $this->user->username = 'davert';        
-    expect_that($this->user->validate(['username']));			
-});				
+public function testValidation()
+{
+    $this->specify("username is required", function() {
+        $this->user->username = null;
+        expect_not($this->user->validate(['username']));	
+    });
+    
+    $this->specify("username is too long", function() {
+        $this->user->username = 'toolooooongnaaaaaaameeee';
+        expect_not($this->user->validate(['username']));			
+    });
+    
+    $this->specify("username is ok", function() {
+        $this->user->username = 'davert';        
+        expect_that($this->user->validate(['username']));			
+    });				
+}
 ```
 
 ## Purpose
@@ -122,18 +94,34 @@ $this->specify("username is ok", function() {
 This tiny library makes your tests a bit readable, by organizing test in well described code blocks.
 Each code block is isolated. 
 
-This means call to `$this->specify` does not change values of configured properties of a test class.
+This means call to `$this->specify` does not change values of properties of a test class.
+Isolated properties should be marked with `@specify` annotation.
 
 ```php
 <?php
-$this->user->name = 'davert';
-$this->specify("i can change my name", function() {
-   $this->user->name = 'jon';
-   $this->assertEquals('jon', $this->user->name);
-});
-       
-$this->assertEquals('davert', $this->user->name);
-?>        
+class UserTest extends PHPUnit\Framework\TestCase {
+
+	use Codeception\Specify;
+	
+	/** @specify */
+	protected $user; // is cloned inside specify blocks
+
+	public function setUp()
+	{		
+		$this->user = new User;
+	}
+
+	public function testValidation()
+	{
+        $this->user->name = 'davert';
+        $this->specify("i can change my name", function() {
+           $this->user->name = 'jon';
+           $this->assertEquals('jon', $this->user->name);
+        });       
+        // user name is davert again
+        $this->assertEquals('davert', $this->user->name);
+	}
+}
 ```
 
 Failure in `specify` block won't get your test stopped.
@@ -154,7 +142,7 @@ If a test fails you will see specification text in the result.
 ## Isolation
 
 Isolation is achieved by **cloning object properties** for each specify block.
-Only properties makred with `@specify` annotation are cloned. 
+Only properties marked with `@specify` annotation are cloned. 
 
 ```php
 /** @specify */
@@ -169,6 +157,7 @@ protected $repository; // not cloning
 ```
 
 Objects are cloned using deep cloning method. 
+
 **If object cloning affects performance, consider turning the clonning off**.
 
 **Mocks are isolated** by default. 
@@ -189,7 +178,6 @@ $this->specify('this should not fail', function () {
     $config->expects($this->never())->method('init')->willReturn(null);
     // success: $config->init() is never executed 
 });
-
 ```
 
 ## Examples
@@ -265,19 +253,16 @@ Available methods:
 
 *Requires PHP >= 7.*
 
-Install with Composer:
+* Install with Composer:
 
-
-```json
-"require-dev": {
-    "codeception/specify": "*",
-    "codeception/verify": "*"
-}
 ```
-Include `Codeception\Specify` trait into `PHPUnit\Framework\TestCase`.
+composer require codeception/specify --dev
+```
 
-For PHPUnit add `Codeception\Specify\ResultPrinter` printer into `phpunit.xml`
+* Include `Codeception\Specify` trait into `PHPUnit\Framework\TestCase`.
+* Add `/** @specify **/` docblock for all properties you want to make isolated inside tests.
 
+* For PHPUnit add `Codeception\Specify\ResultPrinter` printer into `phpunit.xml`
 
 ```xml
 <phpunit colors="true" printerClass="Codeception\Specify\ResultPrinter">

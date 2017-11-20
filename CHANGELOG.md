@@ -2,10 +2,10 @@
 
 ## 1.0
 
-* PHPUnit 6 support
-* **Removed configuration** section
-* **Only properties marked with `@specify` annotation are cloned** in specify blocks.
-* **Removed throws** parameter in specify blocks 
+* BREAKING: PHPUnit 6 support
+* BREAKING: **Removed configuration** section
+* BREAKING: **Only properties marked with `@specify` annotation are cloned** in specify blocks.
+* BREAKING: **Removed throws** parameter in specify blocks 
 * Added `Codeception\Specify\ResultPrinter` to fix printing progress of specify blocks.
 
 ### Upgrade Plan
