@@ -2,14 +2,29 @@
 
 class SpecifyTest extends \SpecifyUnitTest
 {
+    /**
+     * @specify
+     */
     protected $user;
+
+    /**
+     * @specify
+     */
     protected $a;
 
+    /**
+     * @specify
+     */
     private $private = false;
 
-    public function testSpecification()
+    /**
+     * not cloned
+     */
+    protected $b;
+
+    public function testUserCanChangeName()
     {
-        $this->user = new stdClass();
+        $this->user = new User();
         $this->user->name = 'davert';
         $this->specify("i can change my name", function() {
            $this->user->name = 'jon';
@@ -18,9 +33,13 @@ class SpecifyTest extends \SpecifyUnitTest
 
         $this->assertEquals('davert', $this->user->name);
 
-        $this->specify('i can fail here but test goes on', function() {
-            $this->markTestIncomplete();
-        });
+        try {
+            $this->specify('i can fail here but test goes on', function() {
+                $this->markTestIncomplete();
+            });
+        } catch (\PHPUnit\Framework\IncompleteTestError $e) {
+            $this->fail("should not be thrown");
+        }
         $this->assertTrue(true);
     }
 
@@ -84,62 +103,6 @@ class SpecifyTest extends \SpecifyUnitTest
         $this->assertNull($this->user);
     }
 
-    public function testExceptions()
-    {
-        $this->specify('user is invalid', function() {
-            throw new Exception;
-        }, ['throws' => 'Exception']);
-
-        $this->specify('user is invalid', function() {
-            throw new RuntimeException;
-        }, ['throws' => 'RuntimeException']);
-
-        $this->specify('user is invalid', function() {
-            throw new RuntimeException;
-        }, ['throws' => new RuntimeException()]);
-
-        $this->specify('i can handle fails', function() {
-            $this->fail("Ok, I'm failing");
-        }, ['throws' => 'fail']);
-    }
-
-    public function testExceptionsWithMessages()
-    {
-        $this->specify('user is invalid', function() {
-            throw new Exception("test message");
-        }, ['throws' => ['Exception', 'test message']]);
-
-        $this->specify('user is invalid', function() {
-            throw new RuntimeException("test message");
-        }, ['throws' => ['RuntimeException', 'test message']]);
-
-        $this->specify('user is invalid', function() {
-            throw new RuntimeException("test message");
-        }, ['throws' => [new RuntimeException(), "test message"]]);
-
-        $this->specify('i can handle fails', function() {
-            $this->fail("test message");
-        }, ['throws' => ['fail', 'test message']]);
-
-        $this->specify('ignores an empty message', function() {
-            $this->fail("test message");
-        }, ['throws' => ['fail']]);
-
-        $this->specify('mixed case exception messages', function() {
-            throw new RuntimeException("teSt mESSage");
-        }, ['throws' => ['RuntimeException', 'Test MessaGE']]);
-    }
-
-    /**
-     * @expectedException RuntimeException
-     */
-    public function testFailWhenUnexpectedExceptionHappens()
-    {
-        $this->specify('i bubble exception up if no throws is defined', function() {
-            throw new RuntimeException;
-        });
-    }
-
     public function testExamples()
     {
         $this->specify('specify may contain examples', function($a, $b) {
@@ -153,6 +116,7 @@ class SpecifyTest extends \SpecifyUnitTest
     function testOnlySpecifications()
     {
         $this->specify('should be valid');
+        $this->assertTrue(true);
     }
 
     public function testDeepCopy()
@@ -169,17 +133,11 @@ class SpecifyTest extends \SpecifyUnitTest
 
     }
 
-    public function testConfiguration()
+    public function testDeepRevert()
     {
-        $this->specifyConfig()
-            ->ignore('user');
-
         $this->specify("user should be jon", function() {
             $this->user = "jon";
         });
-
-        $this->specifyConfig()
-            ->ignore(['user']);
 
         $this->specify("user should be davert", function() {
             $this->user = "davert";
@@ -189,48 +147,74 @@ class SpecifyTest extends \SpecifyUnitTest
         $this->a->prop = new TestOne();
         $this->a->prop->prop = 1;
 
-        $this->specifyConfig()
-            ->shallowClone('a');
-
         $this->specify("user should be davert", function() {
             $this->a->prop->prop = "davert";
         });
 
-        $this->assertEquals("davert", $this->a->prop->prop);
+        $this->assertEquals(1, $this->a->prop->prop);
     }
 
-    public function testCloneOnly()
+    public function testCloneOnlySpecified()
     {
-        $this->specifyConfig()
-            ->cloneOnly('user');
-
         $this->user = "bob";
-        $this->a = "rob";
+        $this->b = "rob";
         $this->specify("user should be jon", function() {
             $this->user = "jon";
-            $this->a = 'alice';
+            $this->b = 'alice';
         });
         $this->assertEquals('bob', $this->user);
-        $this->assertEquals('alice', $this->a);
+        $this->assertEquals('alice', $this->b);
     }
+
+
+//    public function testFail()
+//    {
+//        $this->specify('this will fail', function(){
+//            $this->assertTrue(false);
+//        });
+//
+//        $this->specify('this will fail', function(){
+//            $this->assertTrue(false);
+//        });
+//
+//        $this->specify('this will fail', function(){
+//            $this->assertTrue(false);
+//        });
+//
+//        $this->specify('this will fail', function(){
+//            $this->assertTrue(false);
+//        });
+//        $this->specify('this will fail', function(){
+//            $this->assertTrue(false);
+//        });
+//        $this->specify('this will fail', function(){
+//            $this->assertTrue(false);
+//        });
+//
+//
+//        $this->specify('this will fail too', function(){
+//            $this->assertTrue(true);
+//        }, ['throws' => 'Exception']);
+//    }
+
 
     /**
      * @Issue https://github.com/Codeception/Specify/issues/6
      */
     function testPropertyRestore()
     {
-        $this->testOne = new testOne();
-        $this->testOne->prop = ['hello', 'world'];
+        $this->a = new testOne();
+        $this->a->prop = ['hello', 'world'];
 
         $this->specify('array contains hello+world', function ($testData) {
-            $this->testOne->prop = ['bye', 'world'];
-            $this->assertContains($testData, $this->testOne->prop);
+            $this->a->prop = ['bye', 'world'];
+            $this->assertContains($testData, $this->a->prop);
         }, ['examples' => [
             ['bye'],
             ['world'],
         ]]);
 
-        $this->assertEquals(['hello', 'world'], $this->testOne->prop);
+        $this->assertEquals(['hello', 'world'], $this->a->prop);
         $this->assertFalse($this->private);
         $this->assertTrue($this->getPrivateProperty());
 
@@ -248,24 +232,9 @@ class SpecifyTest extends \SpecifyUnitTest
     {
         $name = $this->getName();
 
-        $this->specify('it appends index of an example to a test case name', function ($idx, $example) use ($name) {
+        $this->specify('it appends index of an example to a test case name', function ($idx) use ($name) {
             $name .= ' | it appends index of an example to a test case name';
-            $this->assertEquals($name . ' | examples index ' . $idx, $this->getName());
-
-            $this->specify('nested specification without examples', function () use ($idx, $name) {
-                $name .= ' | examples index ' . $idx;
-                $name .= ' | nested specification without examples';
-                $this->assertEquals($name, $this->getName());
-            });
-
-            $this->specify('nested specification with examples', function () use ($idx, $name) {
-                $name .= ' | examples index ' . $idx;
-                $name .= ' | nested specification with examples';
-                $name .= ' | examples index 0';
-                $this->assertEquals($name, $this->getName());
-            }, ['examples' => [
-                [$example]
-            ]]);
+            $this->assertEquals($name . ' # example ' . $idx, $this->getCurrentSpecifyTest()->getName(false));
         }, ['examples' => [
             [0, ''],
             [1, '0'],
@@ -276,53 +245,57 @@ class SpecifyTest extends \SpecifyUnitTest
 
         $this->specify('it does not append index to a test case name if there are no examples', function () use ($name) {
             $name .= ' | it does not append index to a test case name if there are no examples';
-            $this->assertEquals($name, $this->getName());
+            $this->assertEquals($name, $this->getCurrentSpecifyTest()->getName(false));
 
             $this->specify('nested specification without examples', function () use ($name) {
-                $this->assertEquals($name . ' | nested specification without examples', $this->getName());
+                $this->assertEquals($name . ' nested specification without examples', $this->getCurrentSpecifyTest()->getName(false));
             });
 
             $this->specify('nested specification with examples', function () use ($name) {
-                $this->assertEquals($name . ' | nested specification with examples | examples index 0', $this->getName());
+                $this->assertEquals($name . ' nested specification with examples # example 0', $this->getCurrentSpecifyTest()->getName(false));
             }, ['examples' => [
                 [null]
             ]]);
         });
     }
 
+    public function testNestedSpecify()
+    {
+        $name = $this->getName();
+
+        $this->specify('user', function() use ($name) {
+            $name .= ' | user';
+            $this->specify('nested specification', function () use ($name) {
+                $name .= ' nested specification';
+                $this->assertEquals($name, $this->getCurrentSpecifyTest()->getName(false));
+            });
+
+        });
+
+    }
+
     public function testMockObjectsIsolation()
     {
-        $mock = $this->getMock(get_class($this), ['testMockObjectsIsolation']);
+        $mock = $this->createMock(get_class($this));
         $mock->expects($this->once())->method('testMockObjectsIsolation');
 
-        $this->specify('this should fail', function () {
-            $mock = $this->getMock(get_class($this), ['testMockObjectsIsolation']);
-            $mock->expects($this->exactly(100500))->method('testMockObjectsIsolation');
-        }, ['throws' => 'PHPUnit_Framework_ExpectationFailedException']);
-
         $this->specify('this should not fail', function () {
-            $mock = $this->getMock(get_class($this), ['testMockObjectsIsolation']);
-            $mock->expects($this->never())->method('testMockObjectsIsolation');
+            $mock = $this->createMock(get_class($this));
+            $mock->expects($this->never())->method('testMockObjectsIsolation')->willReturn(null);
         });
 
         $mock->testMockObjectsIsolation();
     }
 
-//    public function testFail()
-//    {
-//        $this->specify('this will fail', function(){
-//            $this->assertTrue(false);
-//        });
-//
-//        $this->specify('this will fail too', function(){
-//            echo "executed";
-//            $this->assertTrue(true);
-//        }, ['throws' => 'Exception']);
-//    }
-
 }
 
 class TestOne
 {
+    /** @specify  */
     public $prop;
+}
+
+class User
+{
+    public $name;
 }

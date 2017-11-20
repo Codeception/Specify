@@ -152,43 +152,6 @@ class UserTest extends \PHPUnit_Framework_TestCase
 
 ## Exceptions
 
-You can wait for exception thrown inside a block.
-
-``` php
-<?php
-
-$this->specify('404 if user does not exist', function() {
-	$this->userController->show(999);
-}, ['throws' => 'NotFoundException']);
-
-// alternatively
-$this->specify('404 if user does not exist', function() {
-	$this->userController->show(999);
-}, ['throws' => new NotFoundException]);
-?>
-```
-
-Also you can handle fails inside a block. 
-
-``` php
-<?php
-
-$this->specify('this assertion is failing', function() {
-	$this->assertEquals(2, 3+5);
-}, ['throws' => 'fail']);
-?>
-```
-
-In both cases, you can optionally test the exception message
-
-``` php
-<?php
-
-$this->specify('some exception with a message', function() {
-	throw new NotFoundException('my error message');
-}, ['throws' => ['NotFoundException', 'my error message']]);
-?>
-```
 
 ## Examples
 

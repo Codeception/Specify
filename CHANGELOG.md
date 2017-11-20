@@ -1,5 +1,17 @@
 # Changelog
 
+## 1.0
+
+* PHPUnit 6 support
+* Removed configuration section
+* Only properties marked with `@specify` annotation will be cloned in specify blocks.
+* Added `Codeception\Specify\ResultPrinter` to fix printing of nested examples.
+
+### Upgrade Plan
+
+1. Update to PHP7+ PHPUnit 6+
+2. Add to `phpunit.xml` 
+
 #### 0.4.3
 
 * Show example index on failure by @zszucs *2015-11-27*

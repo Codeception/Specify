@@ -11,17 +11,17 @@ class ObjectProperty
     /**
      * @var mixed
      */
-    private $_owner;
+    private $owner;
 
     /**
      * @var \ReflectionProperty|string
      */
-    private $_property;
+    private $property;
 
     /**
      * @var mixed
      */
-    private $_initValue;
+    private $initValue;
 
     /**
      * ObjectProperty constructor.
@@ -32,16 +32,16 @@ class ObjectProperty
      */
     public function __construct($owner, $property, $value = null)
     {
-        $this->_owner = $owner;
-        $this->_property = $property;
+        $this->owner = $owner;
+        $this->property = $property;
 
-        if (!($this->_property instanceof \ReflectionProperty)) {
-            $this->_property = new \ReflectionProperty($owner, $this->_property);
+        if (!($this->property instanceof \ReflectionProperty)) {
+            $this->property = new \ReflectionProperty($owner, $this->property);
         }
 
-        $this->_property->setAccessible(true);
+        $this->property->setAccessible(true);
 
-        $this->_initValue = ($value === null ? $this->getValue() : $value);
+        $this->initValue = ($value === null ? $this->getValue() : $value);
     }
 
     /**
@@ -49,7 +49,7 @@ class ObjectProperty
      */
     public function getName()
     {
-        return $this->_property->getName();
+        return $this->property->getName();
     }
 
     /**
@@ -57,7 +57,7 @@ class ObjectProperty
      */
     public function restoreValue()
     {
-        $this->setValue($this->_initValue);
+        $this->setValue($this->initValue);
     }
 
     /**
@@ -65,7 +65,7 @@ class ObjectProperty
      */
     public function getValue()
     {
-        return $this->_property->getValue($this->_owner);
+        return $this->property->getValue($this->owner);
     }
 
     /**
@@ -73,6 +73,6 @@ class ObjectProperty
      */
     public function setValue($value)
     {
-        $this->_property->setValue($this->_owner, $value);
+        $this->property->setValue($this->owner, $value);
     }
 }
