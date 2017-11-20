@@ -102,22 +102,22 @@ class UserTest extends PHPUnit\Framework\TestCase
 {
     use Codeception\Specify;
 	
-	/** @specify */
-	protected $user; // is cloned inside specify blocks
+    /** @specify */
+    protected $user; // is cloned inside specify blocks
+    
+    public function setUp()
+    {
+        $this->user = new User;
+    }
 
-	public function setUp()
-	{		
-		$this->user = new User;
-	}
-
-	public function testValidation()
-	{
+    public function testValidation()
+    {
         $this->user->name = 'davert';
         $this->specify("i can change my name", function() {
            $this->user->name = 'jon';
            $this->assertEquals('jon', $this->user->name);
         });       
-        // user name is davert again
+        // user name is "davert" again
         $this->assertEquals('davert', $this->user->name);
     }
 }
