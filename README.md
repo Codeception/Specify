@@ -89,19 +89,18 @@ public function testValidation()
 }
 ```
 
-## Purpose
+## Use Case
 
-This tiny library makes your tests a bit readable, by organizing test in well described code blocks.
-Each code block is isolated. 
+This tiny library makes your tests readable by organizing them in nested code blocks.
+This allows to combine similar tests into one but put them inside nested sections.
 
-This means call to `$this->specify` does not change values of properties of a test class.
-Isolated properties should be marked with `@specify` annotation.
+This is very similar to BDD syntax as in RSpec or Mocha but works inside PHPUnit:
 
 ```php
 <?php
-class UserTest extends PHPUnit\Framework\TestCase {
-
-	use Codeception\Specify;
+class UserTest extends PHPUnit\Framework\TestCase 
+{
+    use Codeception\Specify;
 	
 	/** @specify */
 	protected $user; // is cloned inside specify blocks
@@ -120,9 +119,12 @@ class UserTest extends PHPUnit\Framework\TestCase {
         });       
         // user name is davert again
         $this->assertEquals('davert', $this->user->name);
-	}
+    }
 }
 ```
+
+Each code block is isolated. This means call to `$this->specify` does not change values of properties of a test class.
+Isolated properties should be marked with `@specify` annotation.
 
 Failure in `specify` block won't get your test stopped.
 
@@ -180,9 +182,7 @@ $this->specify('this should not fail', function () {
 });
 ```
 
-## Examples
-
-DataProviders alternative
+## Examples: DataProviders alternative
 
 ```php
 <?php
