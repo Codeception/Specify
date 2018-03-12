@@ -27,7 +27,7 @@ class SpecifyTest implements \PHPUnit\Framework\Test, SelfDescribing
         $this->name = $name;
     }
 
-    public function toString()
+    public function toString() : string
     {
         return $this->name;
     }
