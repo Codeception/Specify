@@ -63,7 +63,7 @@ class SpecifyTest implements \PHPUnit\Framework\Test, SelfDescribing
      *
      * @return TestResult
      */
-    public function run(TestResult $result = null) : PHPUnit\Framework\TestResult
+    public function run(TestResult $result = null) : \PHPUnit\Framework\TestResult
     {
         try {
             call_user_func_array($this->test, $this->example);
