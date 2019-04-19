@@ -7,7 +7,7 @@ class ResultPrinter extends \PHPUnit\TextUI\ResultPrinter
     /**
      * @param string $progress
      */
-    protected function writeProgress($progress) : void
+    protected function writeProgress(string $progress) : void
     {
         $this->write($progress);
         $this->column++;
