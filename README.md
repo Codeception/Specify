@@ -272,7 +272,7 @@ composer require codeception/specify --dev
 ## Recommended
 
 * Use [Codeception/AssertThrows](https://github.com/Codeception/AssertThrows) for exception assertions
-* Use [Codeceptoin/DomainAssert](https://github.com/Codeception/DomainAssert) for verbose domain logic assertions
+* Use [Codeception/DomainAssert](https://github.com/Codeception/DomainAssert) for verbose domain logic assertions
 * Сombine this with [Codeception/Verify](https://github.com/Codeception/Verify) library, to get BDD style assertions.
 
 License: MIT
