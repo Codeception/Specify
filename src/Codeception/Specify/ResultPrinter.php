@@ -2,7 +2,13 @@
 
 namespace Codeception\Specify;
 
-class ResultPrinter extends \PHPUnit\TextUI\ResultPrinter
+use PHPUnit\TextUI\DefaultResultPrinter;
+
+if (!class_exists(DefaultResultPrinter::class)) {
+    class_alias(\PHPUnit\TextUI\ResultPrinter::class, DefaultResultPrinter::class);
+}
+
+class ResultPrinter extends DefaultResultPrinter
 {
     /**
      * @param string $progress
