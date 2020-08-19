@@ -4,10 +4,11 @@ namespace Codeception\Specify;
 
 use PHPUnit\Framework\AssertionFailedError;
 use PHPUnit\Framework\SelfDescribing;
+use PHPUnit\Framework\Test;
 use PHPUnit\Framework\TestResult;
 use SebastianBergmann\Exporter\Exporter;
 
-class SpecifyTest implements \PHPUnit\Framework\Test, SelfDescribing
+class SpecifyTest implements Test, SelfDescribing
 {
     protected $name;
 
@@ -59,11 +60,11 @@ class SpecifyTest implements \PHPUnit\Framework\Test, SelfDescribing
     /**
      * Runs a test and collects its result in a TestResult instance.
      *
-     * @param TestResult $result
+     * @param TestResult|null $result
      *
      * @return TestResult
      */
-    public function run(TestResult $result = null) : \PHPUnit\Framework\TestResult
+    public function run(TestResult $result = null): TestResult
     {
         try {
             call_user_func_array($this->test, $this->example);

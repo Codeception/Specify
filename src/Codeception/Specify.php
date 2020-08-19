@@ -21,7 +21,6 @@ trait Specify
             $this->runSpec($thing, $code, $examples);
             return null;
         }
-        TestCase::markTestIncomplete();
         return $this;
     }
 
@@ -38,7 +37,9 @@ trait Specify
     {
         if ($code instanceof Closure) {
             $this->runSpec($specification, $code, $examples);
+            return $this;
         }
+        TestCase::markTestIncomplete();
         return $this;
     }
 
@@ -51,7 +52,9 @@ trait Specify
     {
         if ($code instanceof Closure) {
             $this->runSpec('should ' . $behavior, $code, $examples);
+            return $this;
         }
+        TestCase::markTestIncomplete();
         return $this;
     }
 
@@ -59,7 +62,9 @@ trait Specify
     {
         if ($code instanceof Closure) {
             $this->runSpec('should not ' . $behavior, $code, $examples);
+            return $this;
         }
+        TestCase::markTestIncomplete();
         return $this;
     }
 }

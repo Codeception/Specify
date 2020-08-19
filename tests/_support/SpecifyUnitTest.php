@@ -1,6 +1,8 @@
 <?php
 
-class SpecifyUnitTest extends \PHPUnit\Framework\TestCase
+use PHPUnit\Framework\TestCase;
+
+class SpecifyUnitTest extends TestCase
 {
     use Codeception\Specify;
 

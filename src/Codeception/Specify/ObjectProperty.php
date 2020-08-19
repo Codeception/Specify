@@ -1,5 +1,8 @@
 <?php
+
 namespace Codeception\Specify;
+
+use ReflectionProperty;
 
 /**
  * Helper for manipulating by an object property.
@@ -14,7 +17,7 @@ class ObjectProperty
     private $owner;
 
     /**
-     * @var \ReflectionProperty|string
+     * @var ReflectionProperty|string
      */
     private $property;
 
@@ -35,8 +38,8 @@ class ObjectProperty
         $this->owner = $owner;
         $this->property = $property;
 
-        if (!($this->property instanceof \ReflectionProperty)) {
-            $this->property = new \ReflectionProperty($owner, $this->property);
+        if (!($this->property instanceof ReflectionProperty)) {
+            $this->property = new ReflectionProperty($owner, $this->property);
         }
 
         $this->property->setAccessible(true);

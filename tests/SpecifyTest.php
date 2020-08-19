@@ -1,6 +1,8 @@
 <?php
 
-class SpecifyTest extends \SpecifyUnitTest
+use PHPUnit\Framework\IncompleteTestError;
+
+class SpecifyTest extends SpecifyUnitTest
 {
     /**
      * @specify
@@ -37,7 +39,7 @@ class SpecifyTest extends \SpecifyUnitTest
             $this->specify('i can fail here but test goes on', function() {
                 $this->markTestIncomplete();
             });
-        } catch (\PHPUnit\Framework\IncompleteTestError $e) {
+        } catch (IncompleteTestError $e) {
             $this->fail("should not be thrown");
         }
         $this->assertTrue(true);
