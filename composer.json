@@ -7,6 +7,10 @@
         {
             "name": "Michael Bodnarchuk",
             "email": "davert@codeception.com"
+        },
+        {
+            "name": "Gustavo Nieves",
+            "homepage": "https://medium.com/@ganieves"
         }
     ],
     "require": {

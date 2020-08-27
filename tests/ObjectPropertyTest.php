@@ -1,6 +1,8 @@
 <?php
 
-class ObjectPropertyTest extends \SpecifyUnitTest
+use Codeception\Specify\ObjectProperty;
+
+class ObjectPropertyTest extends SpecifyUnitTest
 {
     private $private = 'private';
 
@@ -8,17 +10,17 @@ class ObjectPropertyTest extends \SpecifyUnitTest
     {
         $this->prop = 'test';
 
-        $prop = new \Codeception\Specify\ObjectProperty($this, 'prop');
+        $prop = new ObjectProperty($this, 'prop');
 
         $this->assertEquals('prop', $prop->getName());
         $this->assertEquals('test', $prop->getValue());
 
-        $prop = new \Codeception\Specify\ObjectProperty($this, 'private');
+        $prop = new ObjectProperty($this, 'private');
 
         $this->assertEquals('private', $prop->getName());
         $this->assertEquals('private', $prop->getValue());
 
-        $prop = new \Codeception\Specify\ObjectProperty(
+        $prop = new ObjectProperty(
             $this, new ReflectionProperty($this, 'private')
         );
 
@@ -30,7 +32,7 @@ class ObjectPropertyTest extends \SpecifyUnitTest
     {
         $this->prop = 'test';
 
-        $prop = new \Codeception\Specify\ObjectProperty($this, 'prop');
+        $prop = new ObjectProperty($this, 'prop');
         $prop->setValue('another value');
 
         $this->assertEquals('another value', $this->prop);
@@ -39,7 +41,7 @@ class ObjectPropertyTest extends \SpecifyUnitTest
 
         $this->assertEquals('test', $this->prop);
 
-        $prop = new \Codeception\Specify\ObjectProperty($this, 'private');
+        $prop = new ObjectProperty($this, 'private');
         $prop->setValue('another private value');
 
         $this->assertEquals('another private value', $this->private);
@@ -48,7 +50,7 @@ class ObjectPropertyTest extends \SpecifyUnitTest
 
         $this->assertEquals('private', $this->private);
 
-        $prop = new \Codeception\Specify\ObjectProperty($this, 'prop', 'testing');
+        $prop = new ObjectProperty($this, 'prop', 'testing');
 
         $this->assertEquals('test', $prop->getValue());
 
