@@ -1,14 +1,30 @@
 Specify
 =======
 
-BDD style code blocks for PHPUnit / Codeception
+BDD style code blocks for [PHPUnit][1] or [Codeception][2]
 
-[![Latest Stable Version](https://poser.pugx.org/codeception/specify/v/stable)](https://packagist.org/packages/codeception/specify)[![Total Downloads](https://poser.pugx.org/codeception/specify/downloads)](https://packagist.org/packages/codeception/specify)[![Latest Unstable Version](https://poser.pugx.org/codeception/specify/v/unstable)](https://packagist.org/packages/codeception/specify)[![License](https://poser.pugx.org/codeception/specify/license)](https://packagist.org/packages/codeception/specify)
+[![Latest Stable Version](https://poser.pugx.org/codeception/specify/v/stable)](https://packagist.org/packages/codeception/specify)
+[![Total Downloads](https://poser.pugx.org/codeception/specify/downloads)](https://packagist.org/packages/codeception/specify)
+[![Latest Unstable Version](https://poser.pugx.org/codeception/specify/v/unstable)](https://packagist.org/packages/codeception/specify)
+[![License](https://poser.pugx.org/codeception/specify/license)](https://packagist.org/packages/codeception/specify)
 
-Specify allows you to write your tests in more readable BDD style, the same way you might have experienced with [Jasmine](https://jasmine.github.io/).
+Specify allows you to write your tests in more readable BDD style, the same way you might have experienced with [Jasmine][3].
 Inspired by MiniTest of Ruby now you combine BDD and classical TDD style in one test.
 
-### Basic Example
+## Installation
+
+*Requires PHP >= 7.1*
+
+* Install with Composer:
+
+```
+composer require codeception/specify --dev
+```
+
+* Include `Codeception\Specify` trait in your tests.
+
+
+## Usage
 
 Specify `$this->specify` method to add isolated test blocks for your PHPUnit tests! 
 
@@ -17,75 +33,65 @@ public function testValidation()
 {
     $this->assertInstanceOf('Model', $this->user);
 
-    $this->specify("username is required", function() {
+    $this->specify('username is required', function() {
         $this->user->username = null;
-        $this->assertFalse($this->user->validate(['username']));	
+        $this->assertFalse($this->user->validate(['username']));
     });
 
-    $this->specify("username is too long", function() {
+    $this->specify('username is too long', function() {
         $this->user->username = 'toolooooongnaaaaaaameeee';
-        $this->assertFalse($this->user->validate(['username']));			
-    });
-
-    $this->specify("username is ok", function() {
-        $this->user->username = 'davert';
-        $this->assertTrue($this->user->validate(['username']));			
+        $this->assertFalse($this->user->validate(['username']));
     });
 }
 ```
 
 ### BDD Example
 
-Specify supports `describe-it` BDD syntax inside PHPUnit
+Specify supports `describe-it` and `describe-should` BDD syntax inside PHPUnit
 
 ```php
 public function testValidation()
 {
-    $this->describe("user", function() {
-        $this->it("should have a name", function() {
+    $this->describe('user', function () {
+        $this->it('should have a name', function() {
             $this->user->username = null;
-            $this->assertFalse($this->user->validate(['username']));	
+            $this->assertFalse($this->user->validate(['username']));
         });
-
-        $this->it("should not have long name", function() {
-            $this->user->username = 'toolooooongnaaaaaaameeee';
-            $this->assertFalse($this->user->validate(['username']));			
-        });
-        
-        // use `$this->>should` as shortcut
-        $this->should("be ok with valid name", function() {
-            $this->user->username = 'davert';
-            $this->assertTrue($this->user->validate(['username']));			
-        });
-        
-        // empty codeblocks are marked as Incomplete tests
-        $this->it("should be ok with valid name");				
     });
+
+    // you can use chained methods for better readability:
+    $this->describe('user')
+        ->should('be ok with valid name', function() {
+            $this->user->username = 'davert';
+            $this->assertTrue($this->user->validate(['username']));
+        })
+        ->shouldNot('have long name', function() {
+            $this->user->username = 'toolooooongnaaaaaaameeee';
+            $this->assertFalse($this->user->validate(['username']));
+        })
+        // empty codeblocks are marked as Incomplete tests
+        ->it('should be ok with valid name') 
+    ;
 }
 ```
 
 
 ### Specify + Verify Example
 
-Use [Codeception/Verify](https://github.com/Codeception/Verify) for simpler assertions:
+Use [Codeception/Verify][4] for simpler assertions:
 
 ```php
 public function testValidation()
 {
-    $this->specify("username is required", function() {
-        $this->user->username = null;
-        expect_not($this->user->validate(['username']));	
-    });
-    
-    $this->specify("username is too long", function() {
+    $this->specify('username is too long', function() {
         $this->user->username = 'toolooooongnaaaaaaameeee';
-        expect_not($this->user->validate(['username']));			
+        expect_not($this->user->validate(['username']));
     });
-    
-    $this->specify("username is ok", function() {
-        $this->user->username = 'davert';        
-        expect_that($this->user->validate(['username']));			
-    });				
+
+    $this->specify('username is ok', function() {
+        $this->user->username = 'davert';
+        expect_that($this->user->validate(['username']));
+    });
 }
 ```
 
@@ -98,14 +104,15 @@ This is very similar to BDD syntax as in RSpec or Mocha but works inside PHPUnit
 
 ```php
 <?php
+
 class UserTest extends PHPUnit\Framework\TestCase 
 {
     use Codeception\Specify;
-	
+
     /** @specify */
     protected $user; // is cloned inside specify blocks
-    
-    public function setUp()
+
+    public function setUp(): void
     {
         $this->user = new User;
     }
@@ -113,11 +120,11 @@ class UserTest extends PHPUnit\Framework\TestCase
     public function testValidation()
     {
         $this->user->name = 'davert';
-        $this->specify("i can change my name", function() {
+        $this->specify('i can change my name', function() {
            $this->user->name = 'jon';
            $this->assertEquals('jon', $this->user->name);
-        });       
-        // user name is "davert" again
+        });
+        // user name is 'davert' again
         $this->assertEquals('davert', $this->user->name);
     }
 }
@@ -130,7 +137,7 @@ Failure in `specify` block won't get your test stopped.
 
 ```php
 <?php
-$this->specify("failing but test goes on", function() {
+$this->specify('failing but test goes on', function() {
 	$this->fail('bye');
 });
 $this->assertTrue(true);
@@ -186,7 +193,7 @@ $this->specify('this should not fail', function () {
 
 ```php
 <?php
-$this->specify("should calculate square numbers", function($number, $square) {
+$this->specify('should calculate square numbers', function($number, $square) {
 	$this->assertEquals($square, $number*$number);
 }, ['examples' => [
 		[2,4],
@@ -198,7 +205,7 @@ You can also use DataProvider functions in `examples` param.
 
 ```php
 <?php
-$this->specify("should calculate square numbers", function($number, $square) {
+$this->specify('should calculate square numbers', function($number, $square) {
 	$this->assertEquals($square, $number*$number);
 }, ['examples' => $this->provider()]);
 ```
@@ -243,26 +250,25 @@ $this->cleanSpecify(); // removes before/after callbacks
 
 Available methods:
 
-* `$this->specify(name, callable fn = null, params = [])` - starts a specify code block. If `fn` is null, marks test as incomplete. 
-* `$this->describe(name, callable fn = null)` - starts a describe code block. Same as `specify` but expects to receive more nested into `fn`.
-* `$this->it(name, callable fn = null)` - starts a code block. Alias to `specify`.
-* `$this->should(name, callable fn = null)` - starts a code block. Same as `specify` but prepends word "should" into description.
+```php
+// Starts a specify code block:
+$this->specify(string $thing, callable $code = null, $examples = [])
 
+// Starts a describe code block. Same as 'specify' but expects chained 'it' or 'should' methods.
+$this->describe(string $feature, callable $code = null)
 
-## Installation
+// Starts a code block. If 'code' is null, marks test as incomplete.
+$this->it(string $spec, callable $code = null, $examples = [])
+$this->its(string $spec, callable $code = null, $examples = [])
 
-*Requires PHP >= 7.*
-
-* Install with Composer:
-
+// Starts a code block. Same as 'it' but prepends 'should' or 'should not' into description.
+$this->should(string $behavior, callable $code = null, $examples = [])
+$this->shouldNot(string $behavior, callable $code = null, $examples = [])
 ```
-composer require codeception/specify --dev
-```
 
-* Include `Codeception\Specify` trait into `PHPUnit\Framework\TestCase`.
-* Add `/** @specify **/` docblock for all properties you want to make isolated inside tests.
+## Printer Options
 
-* For PHPUnit add `Codeception\Specify\ResultPrinter` printer into `phpunit.xml`
+For PHPUnit, add `Codeception\Specify\ResultPrinter` printer into `phpunit.xml`
 
 ```xml
 <phpunit colors="true" printerClass="Codeception\Specify\ResultPrinter">
@@ -271,8 +277,16 @@ composer require codeception/specify --dev
 
 ## Recommended
 
-* Use [Codeception/AssertThrows](https://github.com/Codeception/AssertThrows) for exception assertions
-* Use [Codeception/DomainAssert](https://github.com/Codeception/DomainAssert) for verbose domain logic assertions
-* Сombine this with [Codeception/Verify](https://github.com/Codeception/Verify) library, to get BDD style assertions.
+* Use [Codeception/AssertThrows][5] for exception assertions
+* Use [Codeception/DomainAssert][6] for verbose domain logic assertions
+* Combine this with [Codeception/Verify][4] library, to get BDD style assertions.
 
-License: MIT
+License: [MIT.][7]
+
+[1]: https://phpunit.de/
+[2]: http://codeception.com/
+[3]: https://jasmine.github.io/
+[4]: https://github.com/Codeception/Verify
+[5]: https://github.com/Codeception/AssertThrows
+[6]: https://github.com/Codeception/DomainAssert
+[7]: /LICENSE

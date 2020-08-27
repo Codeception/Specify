@@ -1,5 +1,14 @@
 # Changelog
 
+## 1.4
+
+* Added **_Fluent Interface_** support, this allows you to add `it`'s and `should`'s chained to a `specify` or `describe`.
+* `Specify.php` trait now only has the public API methods.
+* If an `it` or `should` only receives text now that test is marked as incomplete.
+* `shouldNot` and `its` were added as aliases.
+* Added `.phpunit.result.cache` file to `.gitignore`
+* Updated `README.md`
+
 ## 1.0
 
 * BREAKING: PHPUnit 6 support
@@ -15,32 +24,34 @@
 3. If relied on property cloning, add `@specify` annotation for all properties which needs to be cloned for specify blocks
 4. If you used `throws` parameter, consider using [AssertThrows](https://github.com/Codeception/AssertThrows) package.
 
-#### 0.4.3
+## 0.4.3
 
 * Show example index on failure by @zszucs *2015-11-27*
 
 
-#### 0.4.2
+## 0.4.2
 
 * Testing exception messages by @chrismichaels84 https://github.com/Codeception/Specify#exceptions
 
-#### 0.4.0
+## 0.4.0
 
 * Fixes cloning properties in examples. Issue #6 *2014-10-15*
 * Added global and local specify configs, for disabling cloning properties and changing cloning methods *2014-10-15*
 
 
-#### 0.3.6 03/22/2014
-
+## 0.3.6 
+#### 03/22/2014
 * Cloning unclonnable items
 
 
-#### 0.3.5 03/22/2014
+## 0.3.5 
+#### 03/22/2014
 
 * Updated to DeepCopy 1.1.0
 
 
-#### 0.3.4 02/23/2014
+## 0.3.4 
+#### 02/23/2014
 
 * Added DeepCopy library to save/restore objects between specs
 * Robo file for releases
