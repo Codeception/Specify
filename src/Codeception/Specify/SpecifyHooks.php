@@ -11,7 +11,7 @@ use ReflectionObject;
 use ReflectionProperty;
 use RuntimeException;
 
-trait SpecifyBoostrap
+trait SpecifyHooks
 {
     private $afterSpecify = [];
 

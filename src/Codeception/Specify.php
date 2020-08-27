@@ -3,12 +3,12 @@
 namespace Codeception;
 
 use Closure;
-use Codeception\Specify\SpecifyBoostrap;
+use Codeception\Specify\SpecifyHooks;
 use PHPUnit\Framework\TestCase;
 
 trait Specify
 {
-    use SpecifyBoostrap {
+    use SpecifyHooks {
         afterSpecify as public;
         beforeSpecify as public;
         cleanSpecify as public;
