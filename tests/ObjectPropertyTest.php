@@ -1,5 +1,7 @@
 <?php
 
+declare(strict_types=1);
+
 use Codeception\Specify\ObjectProperty;
 
 class ObjectPropertyTest extends SpecifyUnitTest

@@ -1,5 +1,7 @@
 <?php
 
+declare(strict_types=1);
+
 use PHPUnit\Framework\IncompleteTestError;
 
 class SpecifyTest extends SpecifyUnitTest
