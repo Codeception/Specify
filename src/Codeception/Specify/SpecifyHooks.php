@@ -31,19 +31,17 @@ trait SpecifyHooks
 
     private $specifyName = '';
 
-    /**
-     * @return SpecifyTest
-     */
-    private function getCurrentSpecifyTest()
+    private function getCurrentSpecifyTest(): SpecifyTest
     {
         return $this->currentSpecifyTest;
     }
+
     /**
      * @param string $specification
      * @param Closure|null $callable
      * @param callable|array $params
      */
-    private function runSpec($specification, Closure $callable = null, $params = [])
+    private function runSpec(string $specification, Closure $callable = null, $params = [])
     {
         if (!$callable) {
             return;
@@ -102,7 +100,7 @@ trait SpecifyHooks
      * @param $params
      * @return array
      */
-    private function getSpecifyExamples($params)
+    private function getSpecifyExamples($params): array
     {
         if (isset($params['examples'])) {
             if (!is_array($params['examples'])) {
@@ -113,10 +111,7 @@ trait SpecifyHooks
         return [[]];
     }
 
-    /**
-     * @return ReflectionClass|null
-     */
-    private function specifyGetPhpUnitReflection()
+    private function specifyGetPhpUnitReflection(): ?ReflectionClass
     {
         if ($this instanceof TestCase) {
             return new ReflectionClass(TestCase::class);
@@ -139,7 +134,7 @@ trait SpecifyHooks
     /**
      * @param ObjectProperty[] $properties
      */
-    private function specifyRestoreProperties($properties)
+    private function specifyRestoreProperties(array $properties)
     {
         foreach ($properties as $property) {
             $property->restoreValue();
@@ -149,7 +144,7 @@ trait SpecifyHooks
     /**
      * @return ObjectProperty[]
      */
-    private function getSpecifyObjectProperties()
+    private function getSpecifyObjectProperties(): array
     {
         $objectReflection = new ReflectionObject($this);
         $properties = $objectReflection->getProperties();
@@ -186,7 +181,7 @@ trait SpecifyHooks
         return $clonedProperties;
     }
 
-    private function specifyGetClassPrivateProperties()
+    private function specifyGetClassPrivateProperties(): array
     {
         static $properties = [];
 
@@ -203,7 +198,7 @@ trait SpecifyHooks
     /**
      * @param ObjectProperty[] $properties
      */
-    private function specifyCloneProperties($properties)
+    private function specifyCloneProperties(array $properties)
     {
         foreach ($properties as $property) {
             $propertyValue = $property->getValue();

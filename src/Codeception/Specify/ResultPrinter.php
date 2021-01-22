@@ -12,10 +12,7 @@ if (!class_exists(DefaultResultPrinter::class)) {
 
 class ResultPrinter extends DefaultResultPrinter
 {
-    /**
-     * @param string $progress
-     */
-    protected function writeProgress(string $progress) : void
+    protected function writeProgress(string $progress): void
     {
         $this->write($progress);
         $this->column++;
@@ -27,6 +24,4 @@ class ResultPrinter extends DefaultResultPrinter
             }
         }
     }
-
-
 }

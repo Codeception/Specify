@@ -4,7 +4,7 @@ declare(strict_types=1);
 
 use Codeception\Specify\ObjectProperty;
 
-class ObjectPropertyTest extends SpecifyUnitTest
+final class ObjectPropertyTest extends SpecifyUnitTest
 {
     private $private = 'private';
 

@@ -35,7 +35,7 @@ class SpecifyTest implements Test, SelfDescribing
         return $this->name;
     }
 
-    public function getName($withDataSet = true)
+    public function getName($withDataSet = true): string
     {
         if ($withDataSet && !empty($this->example)) {
             $exporter = new Exporter();
@@ -54,7 +54,7 @@ class SpecifyTest implements Test, SelfDescribing
      * The return value is cast to an integer.
      * @since 5.1.0
      */
-    public function count()
+    public function count(): int
     {
         return 1;
     }
