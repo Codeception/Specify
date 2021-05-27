@@ -1,5 +1,7 @@
 <?php
 
+declare(strict_types=1);
+
 namespace Codeception\Specify;
 
 use ReflectionProperty;
@@ -47,10 +49,7 @@ class ObjectProperty
         $this->initValue = ($value === null ? $this->getValue() : $value);
     }
 
-    /**
-     * @return string
-     */
-    public function getName()
+    public function getName(): string
     {
         return $this->property->getName();
     }

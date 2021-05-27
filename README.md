@@ -13,7 +13,7 @@ Inspired by MiniTest of Ruby now you combine BDD and classical TDD style in one 
 
 ## Installation
 
-*Requires PHP >= 7.1*
+*Requires PHP >= 7.3*
 
 * Install with Composer:
 

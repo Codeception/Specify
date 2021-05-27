@@ -1,5 +1,10 @@
 # Changelog
 
+## 1.5
+
+* Removed support for `PHP 7.1` and `PHP 7.2`.
+* Use strict types in the source code.
+
 ## 1.4
 
 * Added **_Fluent Interface_** support, this allows you to add `it`'s and `should`'s chained to a `specify` or `describe`.
