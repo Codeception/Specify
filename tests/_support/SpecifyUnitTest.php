@@ -20,6 +20,7 @@ class SpecifyUnitTest extends TestCase
     {
         $this->private = $private;
     }
+
     /**
      * @return mixed
      */

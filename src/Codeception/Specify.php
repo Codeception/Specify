@@ -23,6 +23,7 @@ trait Specify
             $this->runSpec($thing, $code, $examples);
             return null;
         }
+
         return $this;
     }
 
@@ -32,6 +33,7 @@ trait Specify
             $this->runSpec($feature, $code);
             return null;
         }
+
         return $this;
     }
 
@@ -41,6 +43,7 @@ trait Specify
             $this->runSpec($specification, $code, $examples);
             return $this;
         }
+
         TestCase::markTestIncomplete();
         return $this;
     }
@@ -56,6 +59,7 @@ trait Specify
             $this->runSpec('should ' . $behavior, $code, $examples);
             return $this;
         }
+
         TestCase::markTestIncomplete();
         return $this;
     }
@@ -66,6 +70,7 @@ trait Specify
             $this->runSpec('should not ' . $behavior, $code, $examples);
             return $this;
         }
+
         TestCase::markTestIncomplete();
         return $this;
     }

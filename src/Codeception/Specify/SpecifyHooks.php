@@ -15,21 +15,15 @@ use RuntimeException;
 
 trait SpecifyHooks
 {
-    private $afterSpecify = [];
+    private array $afterSpecify = [];
 
-    private $beforeSpecify = [];
+    private array $beforeSpecify = [];
 
-    /**
-     * @var DeepCopy
-     */
-    private $copier;
+    private ?DeepCopy $copier = null;
 
-    /**
-     * @var SpecifyTest
-     */
-    private $currentSpecifyTest;
+    private ?SpecifyTest $currentSpecifyTest = null;
 
-    private $specifyName = '';
+    private string $specifyName = '';
 
     private function getCurrentSpecifyTest(): SpecifyTest
     {
@@ -43,7 +37,7 @@ trait SpecifyHooks
      */
     private function runSpec(string $specification, Closure $callable = null, $params = [])
     {
-        if (!$callable) {
+        if ($callable === null) {
             return;
         }
 
@@ -106,8 +100,10 @@ trait SpecifyHooks
             if (!is_array($params['examples'])) {
                 throw new RuntimeException("Examples should be an array");
             }
+
             return $params['examples'];
         }
+
         return [[]];
     }
 
@@ -116,6 +112,7 @@ trait SpecifyHooks
         if ($this instanceof TestCase) {
             return new ReflectionClass(TestCase::class);
         }
+
         return null;
     }
 
@@ -161,7 +158,8 @@ trait SpecifyHooks
             if (!$docBlock) {
                 continue;
             }
-            if (preg_match('~\*(\s+)?@specify\s?~', $docBlock)) {
+
+            if (preg_match('#\*(\s+)?@specify\s?#', $docBlock)) {
                 $property->setAccessible(true);
                 $clonedProperties[] = new ObjectProperty($this, $property);
             }
