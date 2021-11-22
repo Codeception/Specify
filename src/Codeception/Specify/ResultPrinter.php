@@ -15,13 +15,11 @@ class ResultPrinter extends DefaultResultPrinter
     protected function writeProgress(string $progress): void
     {
         $this->write($progress);
-        $this->column++;
-        $this->numTestsRun++;
+        ++$this->column;
+        ++$this->numTestsRun;
 
-        if ($this->column == $this->maxColumn || $this->numTestsRun == $this->numTests) {
-            if ($this->column == $this->maxColumn) {
-                $this->writeNewLine();
-            }
+        if ($this->column === $this->maxColumn) {
+            $this->writeNewLine();
         }
     }
 }

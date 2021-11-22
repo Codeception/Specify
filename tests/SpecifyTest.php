@@ -14,7 +14,7 @@ class SpecifyTest extends SpecifyUnitTest
     /**
      * @specify
      */
-    protected $a;
+    protected ?TestOne $a = null;
 
     /**
      * @specify
@@ -24,7 +24,7 @@ class SpecifyTest extends SpecifyUnitTest
     /**
      * not cloned
      */
-    protected $b;
+    protected ?string $b = null;
 
     public function testUserCanChangeName()
     {
@@ -41,13 +41,14 @@ class SpecifyTest extends SpecifyUnitTest
             $this->specify('i can fail here but test goes on', function() {
                 $this->markTestIncomplete();
             });
-        } catch (IncompleteTestError $e) {
+        } catch (IncompleteTestError $error) {
             $this->fail("should not be thrown");
         }
+
         $this->assertTrue(true);
     }
 
-    function testBeforeCallback()
+    public function testBeforeCallback()
     {
         $this->beforeSpecify(function() {
             $this->user = "davert";
@@ -57,7 +58,7 @@ class SpecifyTest extends SpecifyUnitTest
         });
     }
 
-    function testMultiBeforeCallback()
+    public function testMultiBeforeCallback()
     {
         $this->beforeSpecify(function() {
             $this->user = "davert";
@@ -70,7 +71,7 @@ class SpecifyTest extends SpecifyUnitTest
         });
     }
 
-    function testAfterCallback()
+    public function testAfterCallback()
     {
         $this->afterSpecify(function() {
             $this->user = "davert";
@@ -81,7 +82,7 @@ class SpecifyTest extends SpecifyUnitTest
         $this->assertEquals('davert', $this->user);
     }
 
-    function testMultiAfterCallback()
+    public function testMultiAfterCallback()
     {
         $this->afterSpecify(function() {
             $this->user = "davert";
@@ -95,7 +96,7 @@ class SpecifyTest extends SpecifyUnitTest
         $this->assertEquals('davertjon', $this->user);
     }
 
-    function testCleanSpecifyCallbacks()
+    public function testCleanSpecifyCallbacks()
     {
         $this->afterSpecify(function() {
             $this->user = "davert";
@@ -117,7 +118,7 @@ class SpecifyTest extends SpecifyUnitTest
         ]]);
     }
 
-    function testOnlySpecifications()
+    public function testOnlySpecifications()
     {
         $this->specify('should be valid');
         $this->assertTrue(true);
@@ -205,9 +206,9 @@ class SpecifyTest extends SpecifyUnitTest
     /**
      * @Issue https://github.com/Codeception/Specify/issues/6
      */
-    function testPropertyRestore()
+    public function testPropertyRestore()
     {
-        $this->a = new testOne();
+        $this->a = new TestOne();
         $this->a->prop = ['hello', 'world'];
 
         $this->specify('array contains hello+world', function ($testData) {
@@ -223,9 +224,9 @@ class SpecifyTest extends SpecifyUnitTest
         $this->assertTrue($this->getPrivateProperty());
 
         $this->specify('property $private should be restored properly', function() {
-            $this->private = 'i\'m protected';
-            $this->setPrivateProperty('i\'m private');
-            $this->assertEquals('i\'m private', $this->getPrivateProperty());
+            $this->private = "i'm protected";
+            $this->setPrivateProperty("i'm private");
+            $this->assertEquals("i'm private", $this->getPrivateProperty());
         });
 
         $this->assertFalse($this->private);
@@ -310,7 +311,7 @@ class SpecifyTest extends SpecifyUnitTest
     /**
      * @dataProvider someData
      */
-    public function testSpecifyAndDataProvider($param)
+    public function testSpecifyAndDataProvider(int $param)
     {
         $this->specify('should assert data provider', function () use ($param) {
             $this->assertGreaterThan(0, $param);
@@ -320,14 +321,14 @@ class SpecifyTest extends SpecifyUnitTest
     /**
      * @dataProvider someData
      */
-    public function testExamplesAndDataProvider($param)
+    public function testExamplesAndDataProvider(int $param)
     {
         $this->specify('should assert data provider', function ($example) use ($param) {
             $this->assertGreaterThanOrEqual(5, $param + $example);
         }, ['examples' => [[4], [7], [5]]]);
     }
 
-    public function someData()
+    public function someData(): array
     {
         return [[1], [2]];
     }

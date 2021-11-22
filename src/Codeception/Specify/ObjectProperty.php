@@ -46,7 +46,7 @@ class ObjectProperty
 
         $this->property->setAccessible(true);
 
-        $this->initValue = ($value === null ? $this->getValue() : $value);
+        $this->initValue = ($value ?? $this->getValue());
     }
 
     public function getName(): string
@@ -57,7 +57,7 @@ class ObjectProperty
     /**
      * Restores initial value
      */
-    public function restoreValue()
+    public function restoreValue(): void
     {
         $this->setValue($this->initValue);
     }
@@ -73,7 +73,7 @@ class ObjectProperty
     /**
      * @param mixed $value
      */
-    public function setValue($value)
+    public function setValue($value): void
     {
         $this->property->setValue($this->owner, $value);
     }

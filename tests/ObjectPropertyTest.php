@@ -6,6 +6,8 @@ use Codeception\Specify\ObjectProperty;
 
 final class ObjectPropertyTest extends SpecifyUnitTest
 {
+    private ?string $prop = null;
+
     private $private = 'private';
 
     public function testConstruction()

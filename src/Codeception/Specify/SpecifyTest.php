@@ -12,25 +12,29 @@ use SebastianBergmann\Exporter\Exporter;
 
 class SpecifyTest implements Test, SelfDescribing
 {
-    protected $name;
+    protected string $name = '';
 
-    protected $test;
+    /** @var callable */
+    protected $test = null;
 
-    protected $example;
+    protected array $example = [];
 
+    /**
+     * @var mixed|null
+     */
     protected $throws;
 
-    public function __construct($test)
+    public function __construct(callable $test)
     {
         $this->test = $test;
     }
 
-    public function setName($name)
+    public function setName(string $name): void
     {
         $this->name = $name;
     }
 
-    public function toString() : string
+    public function toString(): string
     {
         return $this->name;
     }
@@ -49,8 +53,7 @@ class SpecifyTest implements Test, SelfDescribing
      * Count elements of an object
      * @link http://php.net/manual/en/countable.count.php
      * @return int The custom count as an integer.
-     * </p>
-     * <p>
+     *
      * The return value is cast to an integer.
      * @since 5.1.0
      */
@@ -61,25 +64,19 @@ class SpecifyTest implements Test, SelfDescribing
 
     /**
      * Runs a test and collects its result in a TestResult instance.
-     *
-     * @param TestResult|null $result
-     *
-     * @return TestResult
      */
     public function run(TestResult $result = null): TestResult
     {
         try {
             call_user_func_array($this->test, $this->example);
-        } catch (AssertionFailedError $e) {
-            $result->addFailure(clone($this), $e, $result->time());
+        } catch (AssertionFailedError $error) {
+            $result->addFailure(clone($this), $error, $result->time());
         }
+
         return $result;
     }
 
-    /**
-     * @param mixed $example
-     */
-    public function setExample($example)
+    public function setExample(array $example): void
     {
         $this->example = $example;
     }
@@ -87,7 +84,7 @@ class SpecifyTest implements Test, SelfDescribing
     /**
      * @param mixed $throws
      */
-    public function setThrows($throws)
+    public function setThrows($throws): void
     {
         $this->throws = $throws;
     }
