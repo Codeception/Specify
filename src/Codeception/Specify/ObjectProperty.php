@@ -46,7 +46,7 @@ class ObjectProperty
 
         $this->property->setAccessible(true);
 
-        $this->initValue = ($value === null ? $this->getValue() : $value);
+        $this->initValue = ($value ?? $this->getValue());
     }
 
     public function getName(): string
