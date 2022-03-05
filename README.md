@@ -7,6 +7,7 @@ BDD style code blocks for [PHPUnit][1] or [Codeception][2]
 [![Total Downloads](https://poser.pugx.org/codeception/specify/downloads)](https://packagist.org/packages/codeception/specify)
 [![Latest Unstable Version](https://poser.pugx.org/codeception/specify/v/unstable)](https://packagist.org/packages/codeception/specify)
 [![License](https://poser.pugx.org/codeception/specify/license)](https://packagist.org/packages/codeception/specify)
+[![StandWithUkraine](https://raw.githubusercontent.com/vshymanskyy/StandWithUkraine/main/badges/StandWithUkraine.svg)](https://github.com/vshymanskyy/StandWithUkraine/blob/main/docs/README.md)
 
 Specify allows you to write your tests in more readable BDD style, the same way you might have experienced with [Jasmine][3].
 Inspired by MiniTest of Ruby now you combine BDD and classical TDD style in one test.
