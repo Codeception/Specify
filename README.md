@@ -285,7 +285,7 @@ For PHPUnit, add `Codeception\Specify\ResultPrinter` printer into `phpunit.xml`
 License: [MIT.][7]
 
 [1]: https://phpunit.de/
-[2]: http://codeception.com/
+[2]: https://codeception.com/
 [3]: https://jasmine.github.io/
 [4]: https://github.com/Codeception/Verify
 [5]: https://github.com/Codeception/AssertThrows
